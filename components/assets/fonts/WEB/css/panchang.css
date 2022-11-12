@@ -1,0 +1,119 @@
+/**
+ * @license
+ *
+ * Font Family: Panchang
+ * Designed by: Barbara Bigosinska, Hitesh Malaviya
+ * URL: https://www.fontshare.com/fonts/panchang
+ * © 2022 Indian Type Foundry
+ *
+ * Font Styles:
+ * Panchang Variable(Variable font)
+ * Panchang Extralight
+ * Panchang Light
+ * Panchang Regular
+ * Panchang Medium
+ * Panchang Semibold
+ * Panchang Bold
+ * Panchang Extrabold         
+ *
+*/
+
+
+/**
+* This is a variable font
+* You can controll variable axes as shown below:
+* font-variation-settings: 'wght' 800.0;
+*
+* available axes:
+
+* 'wght' (range from 200.0 to 800.0)
+
+*/
+
+@font-face {
+  font-family: 'Panchang-Variable';
+  src: url('../fonts/Panchang-Variable.woff2') format('woff2'),
+       url('../fonts/Panchang-Variable.woff') format('woff'),
+       url('../fonts/Panchang-Variable.ttf') format('truetype');
+       font-weight: 200 800;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Extralight';
+  src: url('../fonts/Panchang-Extralight.woff2') format('woff2'),
+       url('../fonts/Panchang-Extralight.woff') format('woff'),
+       url('../fonts/Panchang-Extralight.ttf') format('truetype');
+       font-weight: 200;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Light';
+  src: url('../fonts/Panchang-Light.woff2') format('woff2'),
+       url('../fonts/Panchang-Light.woff') format('woff'),
+       url('../fonts/Panchang-Light.ttf') format('truetype');
+       font-weight: 300;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Regular';
+  src: url('../fonts/Panchang-Regular.woff2') format('woff2'),
+       url('../fonts/Panchang-Regular.woff') format('woff'),
+       url('../fonts/Panchang-Regular.ttf') format('truetype');
+       font-weight: 400;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Medium';
+  src: url('../fonts/Panchang-Medium.woff2') format('woff2'),
+       url('../fonts/Panchang-Medium.woff') format('woff'),
+       url('../fonts/Panchang-Medium.ttf') format('truetype');
+       font-weight: 500;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Semibold';
+  src: url('../fonts/Panchang-Semibold.woff2') format('woff2'),
+       url('../fonts/Panchang-Semibold.woff') format('woff'),
+       url('../fonts/Panchang-Semibold.ttf') format('truetype');
+       font-weight: 600;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Bold';
+  src: url('../fonts/Panchang-Bold.woff2') format('woff2'),
+       url('../fonts/Panchang-Bold.woff') format('woff'),
+       url('../fonts/Panchang-Bold.ttf') format('truetype');
+       font-weight: 700;
+       font-display: swap;
+       font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Panchang-Extrabold';
+  src: url('../fonts/Panchang-Extrabold.woff2') format('woff2'),
+       url('../fonts/Panchang-Extrabold.woff') format('woff'),
+       url('../fonts/Panchang-Extrabold.ttf') format('truetype');
+       font-weight: 800;
+       font-display: swap;
+       font-style: normal;
+}
+

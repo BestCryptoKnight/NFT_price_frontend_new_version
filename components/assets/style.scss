@@ -1,0 +1,95 @@
+@font-face {
+    font-family: Panchang;
+    src: url('./fonts/Panchang-Regular.ttf');
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(174deg, #161519, rgba(255, 0, 0, 0) 70.71%),
+        linear-gradient(85deg, #161519, rgba(0, 255, 0, 0) 70.71%),
+        linear-gradient(221deg, #0e3495, #161519 70.71%);
+
+    color: white;
+}
+
+.panchang-font {
+    font-family: 'Panchang';
+    font-weight: 700;
+}
+
+:root {
+    --primary: #1053FF;
+    --primary2: #1054ff33;
+    --second: #00C6FA;
+    --grey: rgba(255, 255, 255, 0.7);
+    --light: #6c7293;
+    --dark: #4b4b4b;
+    --green: #01E50A;
+    --red: #E50101;
+    --yellow: #E5A601;
+    --noacitve: #ffffff33;
+    --brown: rgba(229, 166, 1, 0.2);
+    --font-size-h1: 70px;
+    --font-size-h2: 50px;
+    --font-size-h3: 30px;
+    --font-size-h4: 24px;
+    --font-size-h5: 18px;
+    --font-size-h6: 16px;
+    --font-size-p: 16px;
+    --font-white-color: white;
+    --font-dark-color: #111111;
+}
+
+.btn {
+    border-radius: 4px;
+    border: 1px solid #1053FF;
+    padding: 10px 20px;
+}
+
+.gradient-font {
+    background: linear-gradient(274.25deg, #1053FF -12.92%, #FFFFFF 95.92%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-family: "PanChang";
+    font-style: normal;
+    font-weight: 900;
+}
+
+.white-color {
+    color: white;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+.no-underline:hover {
+    text-decoration: none;
+}
+
+.secondary-color {
+    color: var(--second);
+}
+
+.secondary-bg {
+    color: var(--second);
+}
+
+.grey-color {
+    color: var(--grey);
+}
+
+.grey-bg {
+    color: var(--grey);
+}
+
+
+// .blue-bg-img{
+//     background: #1053FF;
+//         filter: blur(350px);
+// }

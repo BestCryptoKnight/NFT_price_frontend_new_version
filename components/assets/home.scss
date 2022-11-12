@@ -1,0 +1,82 @@
+.home-container {
+
+    .home-info {
+        // dis-f jc-se fd-c ai-s h10 mo-10 w7
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        width: 70%;
+    }
+
+    .home-info_ {
+        // dis-f jc-se fd-c ai-s h10 mo-10 w7
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        width: 70%;
+    }
+
+    .get-all-section {
+        text-align: center;
+        font-size: 55px;
+        font-family: 'Panchang';
+        font-weight: 900;
+
+        .landing-font {
+
+            div {
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        img {
+            width: 140px;
+            height: 60px;
+            border-radius: 50px;
+            margin-top: -5px;
+        }
+
+
+
+    }
+
+
+    @media (max-width:600px) {
+        .get-all-section {
+            font-size: 23px;
+
+            img {
+                width: 60px;
+                height: 23px;
+            }
+        }
+
+        .home-info {
+            width: 100%;
+        }
+
+        .home-info_ {
+            // dis-f jc-se fd-c ai-s h10 mo-10 w7
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: row;
+            align-items: center;
+            height: 100%;
+            width: 70%;
+        }
+
+        .home-info__ {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .top-collection-section {}
+}
