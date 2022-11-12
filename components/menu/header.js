@@ -13,7 +13,7 @@ setDefaultBreakpoints([
 
 const NavLink = props => (
     <Link{...props}>
-        <a className="no-underline">
+        <a className="text-dec-n">
             {props.children}
         </a>
     </Link>
@@ -21,10 +21,10 @@ const NavLink = props => (
 
 const NavItems = () => {
     return (
-        <div className='menu'>
+        <div className='page-nav'>
             {
                 Links.map((link, index) => {
-                    return <div className='navbar-item' key={index} style={{ background: "rgba(217, 217, 217, 0.05)" }}>
+                    return <div className='navbar-item' key={index} >
                         <NavLink href={link.to}>
                             <>
                                 {link.name}
@@ -40,87 +40,7 @@ const NavItems = () => {
 
 
 const Header = function ({ className }) {
-    const [openMenu, setOpenMenu] = React.useState(false);
-    const [openMenu1, setOpenMenu1] = React.useState(false);
-    const [openMenu2, setOpenMenu2] = React.useState(false);
-    const [openMenu3, setOpenMenu3] = React.useState(false);
-    const handleBtnClick = () => {
-        setOpenMenu(!openMenu);
-    };
-    const handleBtnClick1 = () => {
-        setOpenMenu1(!openMenu1);
-    };
-    const handleBtnClick2 = () => {
-        setOpenMenu2(!openMenu2);
-    };
-    const handleBtnClick3 = () => {
-        setOpenMenu3(!openMenu3);
-    };
-    const closeMenu = () => {
-        setOpenMenu(false);
-    };
-    const closeMenu1 = () => {
-        setOpenMenu1(false);
-    };
-    const closeMenu2 = () => {
-        setOpenMenu2(false);
-    };
-    const closeMenu3 = () => {
-        setOpenMenu3(false);
-    };
 
-    const ref = useOnclickOutside(() => {
-        closeMenu();
-    });
-    const ref1 = useOnclickOutside(() => {
-        closeMenu1();
-    });
-    const ref2 = useOnclickOutside(() => {
-        closeMenu2();
-    });
-    const ref3 = useOnclickOutside(() => {
-        closeMenu3();
-    });
-
-
-    const [showmenu, btn_icon] = useState(false);
-    const [showpop, btn_icon_pop] = useState(false);
-    const [shownot, btn_icon_not] = useState(false);
-    const closePop = () => {
-        btn_icon_pop(false);
-    };
-    const closeNot = () => {
-        btn_icon_not(false);
-    };
-    const refpop = useOnclickOutside(() => {
-        closePop();
-    });
-    const refpopnot = useOnclickOutside(() => {
-        closeNot();
-    });
-
-    useEffect(() => {
-        const header = document.getElementById("myHeader");
-        const totop = document.getElementById("scroll-to-top");
-        const sticky = header.offsetTop;
-        const scrollCallBack = window.addEventListener("scroll", () => {
-            btn_icon(false);
-            if (window.pageYOffset > sticky) {
-                header.classList.add("sticky");
-                totop.classList.add("show");
-
-            } else {
-                header.classList.remove("sticky");
-                totop.classList.remove("show");
-            }
-            if (window.pageYOffset > sticky) {
-                closeMenu();
-            }
-        });
-        return () => {
-            window.removeEventListener("scroll", scrollCallBack);
-        };
-    }, []);
     return (
         <header className={` ${className}`} id="myHeader">
             <div className='container'>
@@ -146,20 +66,8 @@ const Header = function ({ className }) {
                         />
                     </div>
 
-                    <div className="page-nav">
-                        <span className="">Home</span>
-                        <span className="">About</span>
-                    </div>
+                    <NavItems />
 
-                    {/* <BreakpointProvider>
-                        <Breakpoint l down>
-                            {showmenu && <NavItems />}
-                        </Breakpoint>
-
-                        <Breakpoint xl>
-                            <NavItems />
-                        </Breakpoint>
-                    </BreakpointProvider> */}
                 </div>
             </div>
         </header>
