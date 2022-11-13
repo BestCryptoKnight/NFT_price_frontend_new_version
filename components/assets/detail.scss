@@ -1,0 +1,105 @@
+.detail-container {
+
+    .session-1 {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .opt-btn-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .border-btn {
+                border: 1px solid #1053FF;
+                border-radius: 4px;
+                background-color: transparent;
+                padding: 5px 10px;
+                color: white;
+                font-family: Poppins;
+                font-weight: 400;
+                font-size: 16px;
+                display: inline-block;
+            }
+
+            .select {
+                display: flex;
+                color: #AAA;
+                appearance: none;
+                background-image: url(../../public/img/icons/arrow.svg);
+                background-repeat: no-repeat;
+                background-position: right 0.75rem center;
+                background-size: 16px 12px;
+                width: 85px;
+            }
+
+            .select:focus {
+                outline: 0;
+            }
+
+            .toggle {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                .toggle-bar {
+                    width: 49px;
+                    height: 10px;
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 20px;
+                }
+
+                .toggle-pointer {
+                    width: 16px;
+                    height: 16px;
+                    position: absolute;
+                    background-color: #23B028;
+                    border-radius: 50%;
+                    left: 40px;
+                    transition: 0.3s;
+                }
+
+                .north,
+                .south {
+                    width: 22px;
+                    height: 22px;
+                    border-radius: 50%;
+                    background: #1053FF;
+                    font-size: 12px;
+                    padding: 3px 5px;
+                }
+
+                .north {
+                    padding: 3px 7px;
+                }
+
+                .south {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    color: rgba(255, 255, 255, 0.4);
+                    padding: 2px 7px;
+                }
+
+                .south-area,
+                .north-area {
+                    position: absolute;
+                    width: 25px;
+                    height: 25px;
+                    left: 37px;
+                }
+
+                .north-area {
+                    left: 65px;
+                }
+            }
+        }
+
+    }
+
+    .content-box {
+        background: rgba(16, 83, 255, 0.1);
+        border: 0.5px solid var(--primary);
+        border-radius: 10px;
+    }
+}

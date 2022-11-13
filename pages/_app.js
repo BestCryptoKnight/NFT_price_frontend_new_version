@@ -9,7 +9,7 @@ import '../components/assets/style.scss';
 import '../components/assets/header.scss';
 import '../components/assets/footer.scss';
 import '../components/assets/home.scss';
-
+import '../components/assets/detail.scss';
 import '../components/assets/nfttable.scss';
 
 import '../components/assets/about.scss';
