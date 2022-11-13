@@ -15,54 +15,6 @@ import * as selectors from "../../components/store/selectors";
 import { fetchTopCollectionsPrevNext } from "../../components/store/actions/thunks/topCollections";
 import Link from "next/link";
 
-const GlobalStyles = createGlobalStyle`
-
-    .main-stat-card{
-      border-radius: 13.1647px;
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    }
-
-    .stat-detail-card{
-      border-radius: 10px;
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    }
-
-    .stat-detail-heading{
-      color: #00AC4F;
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .stat-detail-text{
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .stat-detail-time{
-      font-size: 10px;
-      color: #636363;
-    }
-
-    .stat-detail-heading-l{
-      color: #00AC4F;
-      font-size: 50px;
-    }
-
-    .stat-detail-text-l{
-      font-size: 28px;
-      font-weight: 700;
-    }
-
-    .stat-detail-time-l{
-      font-size: 18px;
-      color: #636363;
-    }
-
-    .coll-main-title{
-        font-size: 20px;
-        font-weight: 900;
-    }
-`;
 
 const SmallStat = (props) => {
     return (
@@ -277,10 +229,15 @@ const Collections = ({
         navigate.push(link);
     };
 
+    const toggle = (e) => {
+        let pointer = document.getElementById("pointer");
+        if (e.target.id == "south") pointer.style.left = "40px";
+        else pointer.style.left = "67px";
+    }
+
 
     return (
         <div>
-            <GlobalStyles />
             <Head>
                 {collection && (
                     <title>{`${collectionName}`} NFT Floor Price & Stats</title>
@@ -292,15 +249,36 @@ const Collections = ({
                     ></meta>
                 )}
             </Head>
-            <section className="container no-bottom">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <span>
-                            <span className="timestamp">Collections/</span>
-                            {collection && <span>{collectionName}</span>}
-                        </span>
+            <section className="container no-bottom detail-container">
+
+                <div className="session-1">
+                    <div className="opt-btn-group">
+                        <div className="border-btn">
+                            <i className="fas fa-arrow-left"></i>
+                        </div>
+                        <div className="dis-flex">
+                            <select className="border-btn select">
+                                <option>24h</option>
+                                <option>12h</option>
+                                <option>6h</option>
+                            </select>
+                            <div className="border-btn toggle">
+                                <div className="toggle-pointer" id="pointer"></div>
+                                <div className="south">
+                                    <i className="fab fa-ethereum"></i>
+                                </div>
+                                <div className="toggle-bar"></div>
+                                <div className="north"><i className="fa-sharp fa-solid fa-dollar-sign"></i></div>
+                                <div className="south-area" id="south" onClick={toggle}></div>
+                                <div className="north-area" id="north" onClick={toggle}></div>
+                            </div>
+                        </div>
                     </div>
+                    <div className=""></div>
                 </div>
+                <div className=""></div>
+                <div className=""></div>
+                <div className=""></div>
             </section>
 
         </div>
