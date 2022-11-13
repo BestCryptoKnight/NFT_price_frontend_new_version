@@ -3,6 +3,11 @@
     src: url('./fonts/Panchang-Regular.ttf');
 }
 
+@font-face {
+    font-family: Poppines;
+    src: url('./Poppins/Poppins-Regular.ttf');
+}
+
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -18,6 +23,10 @@ body {
 .panchang-font {
     font-family: 'Panchang';
     font-weight: 700;
+}
+
+.poppines-font {
+    font-family: 'Poppines';
 }
 
 :root {
