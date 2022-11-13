@@ -1,6 +1,6 @@
 import React from 'react'
 import Header from '../menu/header'
-import Footer from '../components/footer'
+import Footer from '../menu/footer'
 import ScrollToTop from '../menu/ScrollToTop'
 import { createGlobalStyle } from 'styled-components';
 import { useSelector } from 'react-redux';

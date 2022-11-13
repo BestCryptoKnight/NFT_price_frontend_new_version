@@ -1,6 +1,7 @@
 header {
     .header-container {
         display: flex;
+        flex-direction: row;
         align-items: center;
         justify-content: space-between;
         width: 100%;
@@ -12,6 +13,7 @@ header {
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
         }
 
         .search-input {
@@ -22,13 +24,90 @@ header {
             padding: 5px 20px;
             max-width: 300px;
             width: 100%;
+            color: white;
         }
 
         .page-nav {
             display: flex;
             align-items: center;
             gap: 1rem;
+            color: white;
+
+            .position-relative {
+                position: relative;
+            }
+
+            .text-dec-n {
+                text-decoration: none;
+                color: white;
+
+            }
+
+            .text-dec-n:hover {
+                color: var(--primary);
+                text-decoration: none;
+            }
+
+            .navbar-item {
+                position: relative;
+                display: inline-block;
+                height: max-content;
+                cursor: default;
+
+                .lines {
+                    position: absolute;
+                    top: 22px;
+                    display: block;
+                    width: 0;
+                    border-bottom: 2px solid var(--primary);
+                    transition: .7s;
+                }
+
+                &:hover {
+                    .lines {
+                        width: 90%;
+                        transition: .7s;
+                    }
+                }
+            }
         }
     }
+
+
+
+    .mobile-nav {
+        display: none !important;
+    }
+
+    .laptop-nav {
+        display: block;
+    }
+
+    @media (max-width: 640px) {
+        .search {
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .responsive-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .header-container {
+            flex-direction: column;
+        }
+
+        .mobile-nav {
+            display: block !important;
+        }
+
+        .laptop-nav {
+            display: none !important;
+        }
+    }
+
 
 }

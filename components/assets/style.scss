@@ -4,8 +4,8 @@
 }
 
 @font-face {
-    font-family: Poppins;
-    src: url('./fonts/Poppins-Regular.ttf');
+    font-family: Poppines;
+    src: url('./Poppins/Poppins-Regular.ttf');
 }
 
 body {
@@ -23,6 +23,10 @@ body {
 .panchang-font {
     font-family: 'Panchang';
     font-weight: 700;
+}
+
+.poppines-font {
+    font-family: 'Poppines';
 }
 
 :root {
@@ -59,7 +63,6 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
     font-family: "PanChang";
     font-style: normal;
     font-weight: 900;
@@ -93,8 +96,10 @@ body {
     color: var(--grey);
 }
 
+.dis-flex {
+    display: flex;
+}
 
-// .blue-bg-img{
-//     background: #1053FF;
-//         filter: blur(350px);
-// }
+.flex-auto {
+    flex: auto !important;
+}
