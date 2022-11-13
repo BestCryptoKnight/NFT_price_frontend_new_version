@@ -3,6 +3,7 @@ import SliderMain from "../components/components/SliderCarouselNew";
 import CarouselNewRedux from "../components/components/CarouselNewReduxNew";
 import styled from "styled-components";
 import TopNftCollectionsFiltered from "../components/components/TopNftCollectionsFiltered";
+import NFTTable from "../components/components/NFTTable";
 import { Axios } from "../components/core/axios";
 import { server } from "../components/core/api";
 import { createGlobalStyle } from "styled-components";
@@ -170,6 +171,7 @@ const Home = () => {
 								<h1 className="gradient-font tc w10">
 									Top Collections
 								</h1>
+								<NFTTable />
 							</section>
 						</div>
 					</section>
