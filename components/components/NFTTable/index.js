@@ -20,6 +20,8 @@ const NFTTable = () => {
 
     const [nftcollection, setNftcollection] = useState(tabledata);
 
+    const [filtered, setFiltered] = useState([]);
+
     useEffect(() => {
         let beginningNum = count * (pagenum - 1);
         let endingNum = count * pagenum;
@@ -65,6 +67,17 @@ const NFTTable = () => {
         setPagedata(nftcollection.slice(beginningNum, endingNum));
     }
 
+    const filter = () => {
+        if (filtered.includes("star")) {
+            setNftcollection(tabledata);
+            setFiltered([]);
+        }
+        else {
+            setNftcollection(nftcollection.filter(token => token.stared));
+            setFiltered(["star"]);
+        }
+    }
+
     return (
         <div className='nfttable'>
             <div className="nft-settings">
@@ -85,7 +98,7 @@ const NFTTable = () => {
                 </div>
             </div>
             <div className="nft-buttons">
-                <div className="border-but pointer"><img alt="star" width="20px" src="img/icons/bluestar.svg" /></div>
+                <div className="border-but pointer" onClick={filter}><img alt="star" width="20px" src="img/icons/bluestar.svg" /></div>
                 <div className="border-but pointer">Categories</div>
                 <div className="border-but pointer">Collection</div>
                 <div className="border-but pointer">Creactors</div>
