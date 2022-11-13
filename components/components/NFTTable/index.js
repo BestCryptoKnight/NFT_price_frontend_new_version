@@ -29,8 +29,19 @@ const NFTTable = () => {
 
     const toggle = (e) => {
         let pointer = document.getElementById("pointer");
-        if (e.target.id == "south") pointer.style.left = "40px";
-        else pointer.style.left = "67px";
+        let south = document.getElementsByClassName("south")[0];
+        let north = document.getElementsByClassName("north")[0];
+        let colors = ["#ffffff33", "#1053FF"];
+        let Case = 1;
+        if (e.target.id == "south") {
+            pointer.style.left = "40px";
+        }
+        else {
+            pointer.style.left = "67px";
+            Case = 0;
+        }
+        south.style.backgroundColor = colors[Case];
+        north.style.backgroundColor = colors[1 - Case]
     }
 
     const addToFavourites = (e, id) => {
