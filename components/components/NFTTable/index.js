@@ -3,6 +3,11 @@ import { tabledata } from './tabledata';
 import { useEffect, useState } from "react";
 const Ether = "img/icons/vector.svg";
 
+//Initialize id of each token
+for (let id in tabledata) {
+    tabledata[id].id = parseInt(id);
+}
+
 const NFTTable = () => {
 
     const [pagenum, setPagenum] = useState(1);
@@ -13,21 +18,14 @@ const NFTTable = () => {
     //number of pages
     const [pagecount, setPagecount] = useState(0);
 
-    const [nftcollection, setNftcollection] = useState(tabledata);    
+    const [nftcollection, setNftcollection] = useState(tabledata);
 
     useEffect(() => {
-        for (let id in nftcollection) {
-            nftcollection[id].id = id;
-        }
-    }, [])
-
-    useEffect(() => {
-        window.aa = nftcollection;
         let beginningNum = count * (pagenum - 1);
         let endingNum = count * pagenum;
         setPagedata(nftcollection.slice(beginningNum, endingNum));
-        setPagecount(Math.round(nftcollection.length / count));
-    }, [pagenum, count]);
+        setPagecount(Math.ceil(nftcollection.length / count));
+    }, [pagenum, count, nftcollection]);
 
     const toggle = (e) => {
         let pointer = document.getElementById("pointer");
@@ -42,6 +40,18 @@ const NFTTable = () => {
         }
         else e.target.src = "img/icons/star-filled.svg";
         token.stared = !token.stared;
+    }
+
+    const sort = (column, ascending) => {
+        //ascending:1, descending:0
+        let beginningNum = count * (pagenum - 1);
+        let endingNum = count * pagenum;
+        nftcollection.sort((a, b) => {
+            if (a[column] > b[column]) return ascending;
+            if (a[column] < b[column]) return -ascending;
+            return 0;
+        });
+        setPagedata(nftcollection.slice(beginningNum, endingNum));
     }
 
     return (
@@ -72,14 +82,14 @@ const NFTTable = () => {
             </div>
             <div className="table">
                 <div className="th">
-                    <div className="td">#<SortArrow /></div>
-                    <div className="td">Collectible<SortArrow /></div>
-                    <div className="td">Price Floor<SortArrow /></div>
-                    <div className="td">24h%<SortArrow /></div>
-                    <div className="td">Volumn(24h)<SortArrow /></div>
-                    <div className="td">Sales(24h)<SortArrow /></div>
-                    <div className="td">Listed/Supply Ratio<SortArrow /></div>
-                    <div className="td">Market Cap<SortArrow /></div>
+                    <div className="td">#<SortArrow sort={sort} column="id" /></div>
+                    <div className="td">Collectible<SortArrow sort={sort} column="collectible" /></div>
+                    <div className="td">Price Floor<SortArrow sort={sort} column="pricefloor" /></div>
+                    <div className="td">24h%<SortArrow sort={sort} column="percentage" /></div>
+                    <div className="td">Volumn(24h)<SortArrow sort={sort} column="volumn" /></div>
+                    <div className="td">Sales(24h)<SortArrow sort={sort} column="sales" /></div>
+                    <div className="td">Listed/Supply Ratio<SortArrow sort={sort} column="ratio" /></div>
+                    <div className="td">Market Cap<SortArrow sort={sort} column="marketcap" /></div>
                 </div>
                 {pagedata.map((nft, id) => (
                     <div className="tr" key={id}>
@@ -87,7 +97,7 @@ const NFTTable = () => {
                             <div>
                                 <img alt="star" onClick={(e) => { addToFavourites(e, id) }} width="20px" src={`img/icons/star${nft.stared ? '-filled' : ''}.svg`} />
                             </div>
-                            <div>{count * (pagenum - 1) + id + 1}</div>
+                            <div>{nft.id + 1}</div>
                         </div>
                         <div className="td">
                             <img alt="token" src={nft.img} />
