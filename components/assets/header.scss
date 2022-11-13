@@ -70,6 +70,24 @@ header {
                 }
             }
         }
+
+        .mobile-nav {
+            display: none !important;
+        }
+
+        .laptop-nav {
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .mobile-nav {
+                display: block;
+            }
+
+            .laptop-nav {
+                display: none;
+            }
+        }
     }
 
 }

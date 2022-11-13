@@ -58,6 +58,7 @@ const Header = function ({ className }) {
                             </NavLink>
                         </div>
                     </div>
+                    <NavItems className="mobile-nav" />
 
                     <div className='search' >
                         <input id="quick_search" className="search-input" name="quick_search"
@@ -66,7 +67,7 @@ const Header = function ({ className }) {
                         />
                     </div>
 
-                    <NavItems />
+                    <NavItems className="laptop-nav" />
 
                 </div>
             </div>
