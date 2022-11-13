@@ -21,7 +21,7 @@ const NavLink = props => (
 
 const NavItems = () => {
     return (
-        <div className='page-nav'>
+        <div className="page-nav">
             {
                 Links.map((link, index) => {
                     return <div className='navbar-item' key={index} >
@@ -46,8 +46,8 @@ const Header = function ({ className }) {
             <div className='container'>
                 <div className='header-container'>
 
-                    <div className='no-underline' >
-                        <div className='panchang-font'>
+                    <div className='no-underline responsive-nav' >
+                        <div className='panchang-font flex-auto'>
                             <NavLink href="/">
                                 <span >
                                     NFT
@@ -57,8 +57,11 @@ const Header = function ({ className }) {
                                 </span>
                             </NavLink>
                         </div>
+                        <div className="mobile-nav">
+
+                            <NavItems />
+                        </div>
                     </div>
-                    <NavItems className="mobile-nav" />
 
                     <div className='search' >
                         <input id="quick_search" className="search-input" name="quick_search"
@@ -66,8 +69,10 @@ const Header = function ({ className }) {
                             type="text"
                         />
                     </div>
+                    <div className="laptop-nav">
 
-                    <NavItems className="laptop-nav" />
+                        <NavItems />
+                    </div>
 
                 </div>
             </div>
