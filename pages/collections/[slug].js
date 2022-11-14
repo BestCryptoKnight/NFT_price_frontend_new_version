@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { createGlobalStyle } from "styled-components";
 import { server } from "../../components/core/api";
 import { Axios } from "../../components/core/axios";
 import { useRouter } from "next/router";
@@ -12,36 +11,7 @@ import { fetchTopCollectionsPrevNext } from "../../components/store/actions/thun
 import Link from "next/link";
 import Chart from "../../components/components/ChartSale/Chart";
 
-const SmallStat = (props) => {
-    return (
-        <div className={`p-2 ${props.className}`}>
-            <div
-                className={` w-100 card d-flex flex-column justify-content-center align-items-center stat-detail-card`}
-            >
-                <div className="stat-detail-heading m-0">
-                    {props.icon}
-                    {props.heading}
-                </div>
-                <div className="stat-detail-text m-0">{props.text}</div>
-                <div className="stat-detail-time">{props.time}</div>
-            </div>
-        </div>
-    );
-};
 
-const SocialIcon = (props) => {
-    return (
-        <a
-            className="d-flex align-items-center justify-content-center"
-            href={props.link}
-            target="_blank"
-            rel="noreferrer"
-        >
-            <i className={`${props.icon} fa-lg mr-2`} />
-            <p className="p-0 m-0">{props.title}</p>
-        </a>
-    );
-};
 
 const Collections = ({
     serverCollection,
