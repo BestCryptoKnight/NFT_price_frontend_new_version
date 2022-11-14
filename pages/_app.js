@@ -11,11 +11,11 @@ import '../components/assets/footer.scss';
 import '../components/assets/home.scss';
 import '../components/assets/detail.scss';
 import '../components/assets/nfttable.scss';
-
 import '../components/assets/about.scss';
 
 // Page SCSS
 
+import '../components/assets/Chart.css';
 
 import '../components/assets/bootstrap.css';
 import '../components/assets/responsive.css';

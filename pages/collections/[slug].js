@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CarouselCollectionRecent from "../../components/components/CarouselCollectionRecent";
-import CarouselCollectionNftTop from "../../components/components/CarouselCollectionNftTop";
 import { createGlobalStyle } from "styled-components";
-import SalesChart from "../../components/components/Charts/SalesChart";
-import TwitterChart from "../../components/components/Charts/TwitterChart";
 import { server } from "../../components/core/api";
 import { Axios } from "../../components/core/axios";
 import { useRouter } from "next/router";
@@ -14,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import * as selectors from "../../components/store/selectors";
 import { fetchTopCollectionsPrevNext } from "../../components/store/actions/thunks/topCollections";
 import Link from "next/link";
-
+import Chart from "../../components/components/ChartSale/Chart";
 
 const SmallStat = (props) => {
     return (
@@ -231,8 +227,19 @@ const Collections = ({
 
     const toggle = (e) => {
         let pointer = document.getElementById("pointer");
-        if (e.target.id == "south") pointer.style.left = "40px";
-        else pointer.style.left = "67px";
+        let south = document.getElementsByClassName("south")[0];
+        let north = document.getElementsByClassName("north")[0];
+        let colors = ["#ffffff33", "#1053FF"];
+        let Case = 1;
+        if (e.target.id == "south") {
+            pointer.style.left = "40px";
+        }
+        else {
+            pointer.style.left = "67px";
+            Case = 0;
+        }
+        south.style.backgroundColor = colors[Case];
+        north.style.backgroundColor = colors[1 - Case]
     }
 
 
@@ -274,11 +281,207 @@ const Collections = ({
                             </div>
                         </div>
                     </div>
-                    <div className=""></div>
+                    <div className="content-box .dis-flex-col">
+                        <div className="dis-flex">
+                            <div className="">
+                                <img
+                                    className="img-width"
+                                    src={collection.image_url}
+                                    alt=""
+                                ></img>
+                            </div>
+                            <div className="content-sub-box w-100">
+                                <div className="">
+                                    <div className="bold-font">
+                                        {collectionName}
+                                    </div>
+                                    <div className="text-font-1 mt-2">
+                                        <span className="text-font-2">by</span>
+                                        &nbsp;Yuga Labs&nbsp;
+                                        <img src="/img/verify 8.png" alt="" className="" />
+                                    </div>
+                                </div>
+                                <div className="dis-flex mt-4">
+                                    <div className="flex-auto">
+                                        <span className="text-grey-font">Items Supply</span>
+                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
+                                    </div>
+                                    <div className="straight-line flex-auto"></div>
+                                    <div className="flex-auto">
+                                        <span className="text-grey-font">Items Supply</span>
+                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
+                                    </div>
+                                    <div className="straight-line flex-auto"></div>
+                                    <div className="flex-auto">
+                                        <span className="text-grey-font">Items Supply</span>
+                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
+                                    </div>
+                                    <div className="straight-line flex-auto"></div>
+                                    <div className="flex-auto">
+                                        <span className="text-grey-font">Items Supply</span>
+                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
+                                    </div>
+                                </div>
+                                <div className="linear-line"></div>
+                            </div>
+                        </div>
+                        <div className="dis-flex mt-3 gap-3">
+                            <div className="rank-btn">
+                                <span className="text-grey-font">Rank</span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <span className="bold-font">#3</span>
+                            </div>
+                            <div className="dis-flex-col ">
+                                <div className="">
+                                    <span className="text-font">
+                                        The Bored Ape Yacht Club is a collection of 10,000 unique Bored Ape NFTs— unique digital collectibles living on the Ethereum blockchain. Your Bored Ape doubles
+                                    </span>
+                                    &nbsp;&nbsp;
+                                    <span className="text-color-font">
+                                        See more&nbsp;<i className="fas fa-chevron-down"></i>
+                                    </span>
+
+                                </div>
+                                <div className="dis-flex mt-2">
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                    <div className="flex-auto">
+                                        <div className="bold-color-font">0.08</div>
+                                        <div className="text-font">Mint price</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className=""></div>
-                <div className=""></div>
-                <div className=""></div>
+                <div className="mt-4">
+                    <Chart />
+                </div>
+                <div className="">
+                    <div className="">
+                        <h1 className="gradient-font tac w10 mt-5 mb-5">
+                            Sales Activity
+                        </h1>
+                    </div>
+                    <div className="dis-flex-col ttable">
+                        <div className="trr">
+                            <div className="tdd">
+                                <img src="/img/token/1.png" alt="" className="imgg" />
+                                <h5 className="ml-2">Bored Ape Yacht Club   #8765</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5><i className="fab fa-ethereum"></i> &nbsp; 12.7</h5>
+                            </div>
+                            <div className="tdd">
+                                <h5>About 4 hours ago</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5 >0x6cfdad077... <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h5>
+                            </div>
+                        </div>
+                        <div className="trr">
+                            <div className="tdd">
+                                <img src="/img/token/2.png" alt="" className="imgg" />
+                                <h5 className="ml-2">Bored Ape Yacht Club   #8765</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5><i className="fab fa-ethereum"></i> &nbsp; 12.7</h5>
+                            </div>
+                            <div className="tdd">
+                                <h5>About 4 hours ago</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5 >0x6cfdad077... <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h5>
+                            </div>
+                        </div>
+                        <div className="trr">
+                            <div className="tdd">
+                                <img src="/img/token/3.png" alt="" className="imgg" />
+                                <h5 className="ml-2">Bored Ape Yacht Club   #8765</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5><i className="fab fa-ethereum"></i> &nbsp; 12.7</h5>
+                            </div>
+                            <div className="tdd">
+                                <h5>About 4 hours ago</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5 >0x6cfdad077... <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h5>
+                            </div>
+                        </div>
+                        <div className="trr">
+                            <div className="tdd">
+                                <img src="/img/token/4.png" alt="" className="imgg" />
+                                <h5 className="ml-2">Bored Ape Yacht Club   #8765</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5><i className="fab fa-ethereum"></i> &nbsp; 12.7</h5>
+                            </div>
+                            <div className="tdd">
+                                <h5>About 4 hours ago</h5>
+                            </div>
+                            <div className="tdd tac">
+                                <h5 >0x6cfdad077... <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h5>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div className="justify mt-4">
+                    <div className="load-btn">
+                        Load More
+                    </div>
+                </div>
+                <div className="res-mt7">
+                    <h1 className="gradient-font tac w10">
+                        About
+                    </h1>
+                </div>
+                <div className="session-3">
+                    <div className="sub-title-font ppadding">
+                        Bored Ape Yacht Club price floor and sales live data
+                    </div>
+                    <div className="text-font ppadding">
+                        The current price floor of Bored Ape Yacht Club is 69.41 ETH and the 24 hour trading volume is 892.86 ETH with 13 sales. In the last 24 hours, the price floor of Bored Ape Yacht Club is down 3.33%. The 7D average sale price is 79.429 ETH, the 7D highest sale price is 120.61 ETH and the 7D lowest sale price is 9.00 ETH. The project is currently ranked #1 in NFT Price Floor with a floor cap of 694,100 ETH. It has a listed ratio of 8.23% and a max supply of 10,000.
+                        Bored Ape Yacht Club is an NFT collectible created by Yuga Labs that was released on 4-22-2021. The project consists of 10,000 unique digital items living on the Ethereum blockchain. We categorize it as a pfp/avatar project and it's part of the Yuga Labs general collection.
+                    </div>
+                    <div className="buttom-background ppadding">
+
+                        <div className="sub-title-font res-pt2">
+                            What is Bored Ape Yacht Club?
+                        </div>
+                        <div className="text-font res-pt2">
+                            Bored Ape Yacht Club is, along with CryptoPunks, one of the most popular digital collectibles in NFT format on Ethereum. If CryptoPunks can be considered the genesis of the PFP (profile picture) concept applied to collectible digital assets that take the form of non-fungible tokens, Bored Ape Yacht Club represents the refinement of this concept through a series of innovations.
+                        </div>
+                        <div className="justify">
+                            <div className="fload-btn">
+                                Load More
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
         </div>

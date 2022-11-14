@@ -103,3 +103,8 @@ body {
 .flex-auto {
     flex: auto !important;
 }
+
+.dis-flex-col {
+    display: flex;
+    flex-direction: column;
+}
