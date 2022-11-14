@@ -95,11 +95,208 @@
             }
         }
 
+        .img-width {
+            width: 172px;
+        }
+
     }
 
     .content-box {
         background: rgba(16, 83, 255, 0.1);
         border: 0.5px solid var(--primary);
         border-radius: 10px;
+        padding: 18px 18px;
+    }
+
+    .straight-line {
+        width: 0;
+        height: 22px;
+        border-left: 1px solid white;
+        opacity: 0.2;
+        margin-top: 5px;
+    }
+
+    .linear-line {
+        transform: rotate(0.08deg);
+        background: linear-gradient(270deg, #131313 0%, #1053FF 66%, #131313 80%);
+        width: 100%;
+        border: none;
+        display: flex;
+        height: 1px;
+        margin-top: 30px;
+    }
+
+    .content-sub-box {
+        padding: 10px 18px;
+    }
+
+    .rank-btn {
+        width: 172px;
+        height: 72px;
+        padding: 19px 45px 20px 42px;
+        text-align: center;
+        background: rgba(16, 83, 255, 0.1);
+        border: 0.5px solid var(--primary);
+        border-radius: 10px;
+    }
+
+    .bold-font {
+        font-family: 'Poppins';
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        color: white;
+    }
+
+    .bold-color-font {
+        font-family: 'Poppins';
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        color: var(--primary);
+    }
+
+    .text-font {
+        font-family: 'Poppins';
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 30px;
+        color: white;
+    }
+
+    .text-font-1 {
+        font-family: 'Poppins';
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 30px;
+        color: white;
+    }
+
+    .text-font-2 {
+        font-family: 'Poppins';
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 30px;
+        color: white;
+    }
+
+    .text-color-font {
+        font-family: 'Poppins';
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #E5A601;
+    }
+
+    .text-grey-font {
+        font-family: 'Poppins';
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 30px;
+        color: white;
+        opacity: 0.5;
+    }
+
+    .ttable {
+        margin-top: 6rem;
+
+        .tdd:first-child {
+            width: 30%;
+        }
+
+        .tdd:nth-child(2) {
+            width: 20%;
+        }
+
+        .tdd:nth-child(3) {
+            width: 20%;
+        }
+
+        .tdd:nth-child(4) {
+            width: 30%;
+        }
+
+        .trr {
+            display: flex;
+            flex-direction: row;
+            border: 1px solid #1053FF;
+            background-color: #161b30;
+            padding: 10px 5px;
+            border-radius: 4px;
+            color: white;
+            align-items: center;
+            margin-bottom: 10px;
+
+            .tdd {
+
+                .imgg {
+                    margin-top: -2px;
+                }
+
+                h5 {
+                    font-size: 15px;
+                    display: inline-block;
+                }
+
+                .primary-color {
+                    color: var(--primary);
+                }
+            }
+        }
+
+    }
+
+    .load-btn {
+        background: rgba(16, 83, 255, 0.2);
+        border: 1px solid var(--primary);
+        border-radius: 4px;
+        padding: 17px 61px;
+        color: white;
+        text-align: center;
+        width: fit-content;
+        cursor: pointer;
+    }
+
+    .session-3 {
+        margin-top: 50px;
+        background: rgba(16, 83, 255, 0.1);
+        border: 0.5px solid #1053FF;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-top: 44px;
+
+
+        .sub-title-font {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 30px;
+            color: var(--primary);
+        }
+
+        .ppadding {
+            padding: 0 32px;
+        }
+
+        .buttom-background {
+            padding: 0 -32px;
+            background: linear-gradient(0deg, rgba(16, 83, 255, 0.5) 0%, rgba(16, 83, 255, 0) 100%);
+        }
+
+        .fload-btn {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            background: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            padding: 17px 61px;
+            color: white;
+            text-align: center;
+            width: fit-content;
+            cursor: pointer;
+        }
     }
 }

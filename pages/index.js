@@ -168,7 +168,7 @@ const Home = () => {
 							<br />
 							<br />
 							<section className="top-collection-section">
-								<h1 className="gradient-font tc w10">
+								<h1 className="gradient-font tac w10">
 									Top Collections
 								</h1>
 								<NFTTable />
