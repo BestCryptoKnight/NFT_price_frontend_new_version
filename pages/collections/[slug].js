@@ -196,16 +196,19 @@ const Collections = ({
     };
 
     const toggle = (e) => {
+        let lefts = [[40, 67], [26, 56]];
         let pointer = document.getElementById("pointer");
         let south = document.getElementsByClassName("south")[0];
         let north = document.getElementsByClassName("north")[0];
         let colors = ["#ffffff33", "#1053FF"];
+        let mobile = 0;
+        if (window.innerWidth <= 768) mobile = 1;
         let Case = 1;
         if (e.target.id == "south") {
-            pointer.style.left = "40px";
+            pointer.style.left = lefts[mobile][0] + "px";
         }
         else {
-            pointer.style.left = "67px";
+            pointer.style.left = lefts[mobile][1] + "px";
             Case = 0;
         }
         south.style.backgroundColor = colors[Case];
@@ -233,7 +236,7 @@ const Collections = ({
                         <div className="border-btn">
                             <i className="fas fa-arrow-left"></i>
                         </div>
-                        <div className="dis-flex">
+                        <div className="dis-flex gap-10">
                             <select className="border-btn select">
                                 <option>24h</option>
                                 <option>12h</option>
@@ -251,52 +254,104 @@ const Collections = ({
                             </div>
                         </div>
                     </div>
-                    <div className="content-box .dis-flex-col">
+                    <div className="content-box dis-flex-col">
                         <div className="dis-flex">
                             <div className="">
                                 <img
                                     className="img-width"
                                     src={collection.image_url}
                                     alt=""
-                                ></img>
+                                />
+                                <div className="rank-btn mobile-show mt-2">
+                                    <span className="text-grey-font">Rank</span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span className="bold-font">#3</span>
+                                </div>
                             </div>
                             <div className="content-sub-box w-100">
+                                <div className="icons-group">
+                                    <img src="/img/icons/social1.png" alt="" className="icon-general" />
+                                    <img src="/img/icons/social2.png" alt="" className="icon-general" />
+                                    <img src="/img/icons/social3.png" alt="" className="icon-general" />
+                                    <img src="/img/icons/social4.png" alt="" className="icon-general" />
+                                    <div className="vertical-line"></div>
+                                    <img src="/img/icons/star-line.png" alt="" className="icon-general" />
+                                    <img src="/img/icons/share-fill.png" alt="" className="icon-general" />
+                                    <img src="/img/icons/menu.png" alt="" className="icon-menu" />
+                                </div>
                                 <div className="">
                                     <div className="bold-font">
                                         {collectionName}
                                     </div>
-                                    <div className="text-font-1 mt-2">
+                                    <div className=" mt-2">
                                         <span className="text-font-2">by</span>
-                                        &nbsp;Yuga Labs&nbsp;
+                                        &nbsp;
+                                        <span className="text-font-1">
+                                            Yuga Labs
+                                        </span>
+                                        &nbsp;
                                         <img src="/img/verify 8.png" alt="" className="" />
                                     </div>
                                 </div>
-                                <div className="dis-flex mt-4">
-                                    <div className="flex-auto">
-                                        <span className="text-grey-font">Items Supply</span>
-                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
+                                <div className="d-flex flex-column flex-md-row gap-10 mt-4">
+                                    <div className="d-flex gap-10 ">
+                                        <div className="">
+                                            <div className="d-flex gap-10 flex-column flex-md-row">
+                                                <div className=" order-md-2 order-sm-1">
+                                                    <span className="bold-font">10,000</span>
+                                                </div>
+                                                <div className=" order-md-1 order-sm-2">
+                                                    <span className="text-grey-font">Items Supply</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="straight-line mobile-hide"></div>
+                                        <div className="">
+                                            <div className="d-flex gap-10 flex-column flex-md-row">
+                                                <div className="order-md-2 order-sm-1">
+                                                    <span className="bold-font">Jul 2022</span>
+                                                </div>
+                                                <div className="order-md-1 order-sm-2">
+                                                    <span className="text-grey-font">Created</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="straight-line mobile-hide"></div>
                                     </div>
-                                    <div className="straight-line flex-auto"></div>
-                                    <div className="flex-auto">
-                                        <span className="text-grey-font">Items Supply</span>
-                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
-                                    </div>
-                                    <div className="straight-line flex-auto"></div>
-                                    <div className="flex-auto">
-                                        <span className="text-grey-font">Items Supply</span>
-                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
-                                    </div>
-                                    <div className="straight-line flex-auto"></div>
-                                    <div className="flex-auto">
-                                        <span className="text-grey-font">Items Supply</span>
-                                        &nbsp;&nbsp;<span className="bold-font">10,000</span>
+                                    <div className="linear-line mobile-show"></div>
+                                    <div className="linear-vertical-line mobile-show"></div>
+
+                                    <div className="d-flex gap-10">
+
+                                        <div className="">
+                                            <div className="d-flex gap-10 flex-column flex-md-row">
+                                                <div className="order-md-2 order-sm-1">
+                                                    <span className="bold-font">2.5%</span>
+                                                </div>
+                                                <div className="order-md-1 order-sm-2">
+                                                    <span className="text-grey-font">Creator's Fee</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="straight-line mobile-hide"></div>
+                                        <div className="">
+                                            <div className="d-flex gap-10 flex-column flex-md-row">
+                                                <div className="order-md-2 order-sm-1">
+                                                    <span className="bold-font">Ethereum</span>
+                                                </div>
+                                                <div className="order-md-1 order-sm-2">
+                                                    <span className="text-grey-font">Network</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="linear-line"></div>
+                                <div className="linear-line mobile-hide"></div>
+
                             </div>
                         </div>
                         <div className="dis-flex mt-3 gap-3">
-                            <div className="rank-btn">
+                            <div className="rank-btn mobile-hide">
                                 <span className="text-grey-font">Rank</span>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <span className="bold-font">#3</span>

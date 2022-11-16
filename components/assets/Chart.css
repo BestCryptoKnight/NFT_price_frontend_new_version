@@ -12,7 +12,7 @@
 .chart-header {
   display: flex;
   justify-content: space-between;
-  width: 1050px;
+  width: 100%;
 }
 
 .button-filter {
@@ -52,4 +52,12 @@
   width: 1050px;
   height: 500px;
   border: 1px solid #1053FF;
+}
+
+@media (max-width:768px) {
+  .chart-panel {
+    width: 100%;
+    height: 250px;
+  }
+
 }

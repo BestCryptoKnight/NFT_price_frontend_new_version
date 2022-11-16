@@ -6,8 +6,33 @@ import Head from "next/head";
 import { numFormatter, numberWithCommas } from "../utils/customFunctions";
 
 
-const Home = () => {
+const Home = ({ datas }) => {
+	console.log("datas", datas.data);
+	const [tableDatas, setTableDatas] = useState([]);
+	useEffect(() => {
+		setTableDatas(datas.data.map((backendData, index) => {
+			return {
+				id: index,
+				img: backendData.data.image_url,
+				collectible: backendData.data.name,
+				pricefloor: backendData.data.stats.floor_price ? backendData.data.stats.floor_price : 0,
+				percentage: backendData.data.stats.one_day_change * 100,
+				percentage_7: backendData.data.stats.seven_day_change * 100,
+				percentage_30: backendData.data.stats.thirty_day_change * 100,
+				volumn: backendData.data.stats.one_day_volume,
+				volumn_7: backendData.data.stats.seven_day_volume,
+				volumn_30: backendData.data.stats.thirty_day_volume,
+				sales: backendData.data.stats.one_day_sales,
+				sales_7: backendData.data.stats.seven_day_sales,
+				sales_30: backendData.data.stats.thirty_day_sales,
+				ratio_pecentage: backendData.data.stats.supply_ratio_ratio,
+				ratio: backendData.data.stats.supply_ratio_pecentage,
+				marketcap: backendData.data.stats.market_capture,
+				slug: backendData.data.slug
+			}
+		}))
 
+	}, []);
 
 	return (
 		<>
@@ -64,7 +89,7 @@ const Home = () => {
 														NFT Sold
 													</span>
 												</div>
-												<div className="w10 tr">
+												<div className="w10 tar">
 													<h2 className="secondary-color">
 														95K+
 													</h2>
@@ -93,7 +118,7 @@ const Home = () => {
 								<h1 className="gradient-font tac w10">
 									Top Collections
 								</h1>
-								<NFTTable />
+								{tableDatas.length && <NFTTable tabledata={tableDatas} />}
 							</section>
 						</div>
 					</section>
@@ -102,4 +127,28 @@ const Home = () => {
 		</>
 	);
 };
+
+export async function getStaticProps() {
+	// Call an external API endpoint to get posts.
+	// You can use any data fetching library
+	const res = await fetch(
+		`${server.baseUrl}${server.collections}/getCollections/1d`,
+		{
+			method: "GET", // or 'PUT'
+			headers: {
+				[`${server.header.key}`]: `${server.header.value}`,
+			},
+		}
+	);
+	const datas = await res.json()
+
+	// By returning { props: { datas } }, the Blog component
+	// will receive `datas` as a prop at build time
+	return {
+		props: {
+			datas,
+		},
+	}
+}
+
 export default Home;
