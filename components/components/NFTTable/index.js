@@ -1,14 +1,16 @@
 import SortArrow from "./SortArrow";
-import { tabledata } from './tabledata';
-import { useEffect, useState } from "react";
+// import { tabledata } from './tabledata';
+import { memo, useEffect, useState } from "react";
+import { numFormatter, numberWithCommas } from "../../../utils/customFunctions";
+import { useRouter } from "next/router";
 const Ether = "img/icons/vector.svg";
 
 //Initialize id of each token
-for (let id in tabledata) {
-    tabledata[id].id = parseInt(id);
-}
+// for (let id in tabledata) {
+//     tabledata[id].id = parseInt(id);
+// }
 
-const NFTTable = () => {
+const NFTTable = ({ tabledata }) => {
 
     const [pagenum, setPagenum] = useState(1);
     //number of tokes per page
@@ -30,16 +32,19 @@ const NFTTable = () => {
     }, [pagenum, count, nftcollection]);
 
     const toggle = (e) => {
+        let lefts = [[40, 67], [26, 56]];
         let pointer = document.getElementById("pointer");
         let south = document.getElementsByClassName("south")[0];
         let north = document.getElementsByClassName("north")[0];
         let colors = ["#ffffff33", "#1053FF"];
+        let mobile = 0;
+        if (window.innerWidth <= 768) mobile = 1;
         let Case = 1;
         if (e.target.id == "south") {
-            pointer.style.left = "40px";
+            pointer.style.left = lefts[mobile][0] + "px";
         }
         else {
-            pointer.style.left = "67px";
+            pointer.style.left = lefts[mobile][1] + "px";
             Case = 0;
         }
         south.style.backgroundColor = colors[Case];
@@ -78,6 +83,12 @@ const NFTTable = () => {
         }
     }
 
+    const navigateTo = (link) => {
+        navigate.push(link);
+        // window.open(link);
+    };
+    const navigate = useRouter();
+
     return (
         <div className='nfttable'>
             <div className="nft-settings">
@@ -89,7 +100,7 @@ const NFTTable = () => {
                 <div className="border-but toggle">
                     <div className="toggle-pointer" id="pointer"></div>
                     <div className="south">
-                        <img alt="ether" src={Ether} />
+                        <i className="fab fa-ethereum" style={{ color: "white" }}></i>
                     </div>
                     <div className="toggle-bar"></div>
                     <div className="north"><i className="fa-sharp fa-solid fa-dollar-sign"></i></div>
@@ -98,10 +109,10 @@ const NFTTable = () => {
                 </div>
             </div>
             <div className="nft-buttons">
-                <div className="border-but pointer" onClick={filter}><img alt="star" width="20px" src="img/icons/bluestar.svg" /></div>
+                <div className="border-but pointer" onClick={filter}><img alt="star" className="star" src="img/icons/bluestar.svg" /></div>
                 <div className="border-but pointer">Categories</div>
                 <div className="border-but pointer">Collection</div>
-                <div className="border-but pointer">Creactors</div>
+                <div className="border-but pointer hidden-mobile">Creactors</div>
                 <div className="border-but pointer">Chains</div>
             </div>
             <div className="table">
@@ -109,49 +120,51 @@ const NFTTable = () => {
                     <div className="td">#<SortArrow sort={sort} column="id" /></div>
                     <div className="td">Collectible<SortArrow sort={sort} column="collectible" /></div>
                     <div className="td">Price Floor<SortArrow sort={sort} column="pricefloor" /></div>
-                    <div className="td">24h%<SortArrow sort={sort} column="percentage" /></div>
+                    <div className="td hidden-mobile">24h%<SortArrow sort={sort} column="percentage" /></div>
                     <div className="td">Volumn(24h)<SortArrow sort={sort} column="volumn" /></div>
-                    <div className="td">Sales(24h)<SortArrow sort={sort} column="sales" /></div>
-                    <div className="td">Listed/Supply Ratio<SortArrow sort={sort} column="ratio" /></div>
-                    <div className="td">Market Cap<SortArrow sort={sort} column="marketcap" /></div>
+                    <div className="td hidden-mobile">Sales(24h)<SortArrow sort={sort} column="sales" /></div>
+                    <div className="td hidden-mobile">Listed/Supply Ratio<SortArrow sort={sort} column="ratio" /></div>
+                    <div className="td hidden-mobile">Market Cap<SortArrow sort={sort} column="marketcap" /></div>
                 </div>
                 {pagedata.map((nft, id) => (
                     <div className="tr" key={id}>
                         <div className="td">
                             <div>
-                                <img alt="star" onClick={(e) => { addToFavourites(e, id) }} width="20px" src={`img/icons/star${nft.stared ? '-filled' : ''}.svg`} />
+                                <img alt="star" onClick={(e) => { addToFavourites(e, id) }} className="star" src={`img/icons/star${nft.stared ? '-filled' : ''}.svg`} />
                             </div>
                             <div>{nft.id + 1}</div>
                         </div>
-                        <div className="td">
-                            <img alt="token" src={nft.img} />
+                        <div className="td align-center">
+                            <img alt="token" className="avatar" src={nft.img} />
                             <h5>{nft.collectible}</h5>
-                            <button className="chart-button">Charts&nbsp;<i className="fa-sharp fa-solid fa-arrow-up"></i></button>
+                            <button className="chart-button hidden-mobile" onClick={() => navigateTo(`/collections/${nft.slug}`)}>
+                                Charts&nbsp;<i className="fa-sharp fa-solid fa-arrow-up"></i>
+                            </button>
                         </div>
-                        <div className="td">
+                        <div className="td ">
                             <img src={Ether} alt="ether" />
-                            {nft.pricefloor}
+                            {numFormatter(nft.pricefloor)}
                         </div>
-                        <div className="td">
+                        <div className="td hidden-mobile">
                             {
                                 nft.percentage > 0 ?
-                                    (<span className="green">+{nft.percentage}%</span>) :
-                                    (<span className="red">{nft.percentage}%</span>)
+                                    (<span className="green">+{numFormatter(nft.percentage)}%</span>) :
+                                    (<span className="red">{numFormatter(nft.percentage)}%</span>)
                             }
                         </div>
-                        <div className="td">
+                        <div className="td ">
                             <img src={Ether} alt="ether" />
-                            {nft.volumn}
+                            {numFormatter(nft.volumn)}
                         </div>
-                        <div className="td">
-                            {nft.sales}
+                        <div className="td hidden-mobile">
+                            {numFormatter(nft.sales)}
                         </div>
-                        <div className="td">
-                            {nft.ratio}
+                        <div className="td hidden-mobile">
+                            {nft.ratio_pecentage}
                         </div>
-                        <div className="td">
+                        <div className="td hidden-mobile">
                             <img src={Ether} alt="ether" />
-                            {nft.marketcap}
+                            {numFormatter(nft.marketcap)}
                         </div>
                     </div>))}
             </div>
@@ -171,4 +184,4 @@ const NFTTable = () => {
         </div>
     )
 };
-export default NFTTable;
+export default memo(NFTTable);
