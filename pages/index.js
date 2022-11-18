@@ -6,8 +6,7 @@ import Head from "next/head";
 import { numFormatter, numberWithCommas } from "../utils/customFunctions";
 
 
-const Home = ({ datas }) => {
-	console.log("datas", datas.data);
+const Home = ({ datas, priceAPIData, dataChain }) => {
 	const [tableDatas, setTableDatas] = useState([]);
 	useEffect(() => {
 		setTableDatas(datas.data.map((backendData, index) => {
@@ -28,10 +27,14 @@ const Home = ({ datas }) => {
 				ratio_pecentage: backendData.data.stats.supply_ratio_ratio,
 				ratio: backendData.data.stats.supply_ratio_pecentage,
 				marketcap: backendData.data.stats.market_capture,
-				slug: backendData.data.slug
+				slug: backendData.data.slug,
+				chain: (backendData.chain.symbol == "ETH")
+					? "ETHEREUM"
+					: (backendData.chain.symbol == "SOL")
+						? "SOLANA"
+						: "MATIC"
 			}
 		}))
-
 	}, []);
 
 	return (
@@ -118,7 +121,7 @@ const Home = ({ datas }) => {
 								<h1 className="gradient-font tac w10">
 									Top Collections
 								</h1>
-								{tableDatas.length && <NFTTable tabledata={tableDatas} />}
+								{tableDatas.length && <NFTTable tabledata={tableDatas} priceUSD={priceAPIData.data.USD} dataChain={dataChain.data} />}
 							</section>
 						</div>
 					</section>
@@ -140,13 +143,37 @@ export async function getStaticProps() {
 			},
 		}
 	);
-	const datas = await res.json()
+
+	const priceAPIRequest = await fetch(
+		`${server.baseUrl}/get-eth-stats`,
+		{
+			method: "GET", // or 'PUT'
+			headers: {
+				[`${server.header.key}`]: `${server.header.value}`,
+			},
+		}
+	);
+
+	const dataChainRequest = await fetch(
+		`${server.baseUrl}/collection/getChains`, {
+		method: "GET",
+		headers: {
+			[`${server.header.key}`]: `${server.header.value}`,
+		},
+	}
+	);
+
+	const datas = await res.json();
+	const priceAPIData = await priceAPIRequest.json();
+	const dataChain = await dataChainRequest.json();
 
 	// By returning { props: { datas } }, the Blog component
 	// will receive `datas` as a prop at build time
 	return {
 		props: {
 			datas,
+			priceAPIData,
+			dataChain
 		},
 	}
 }

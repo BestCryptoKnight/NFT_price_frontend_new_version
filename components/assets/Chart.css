@@ -10,6 +10,7 @@
 }
 
 .chart-header {
+  padding: 0 22px;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -58,6 +59,18 @@
   .chart-panel {
     width: 100%;
     height: 250px;
+  }
+
+  .button-filter {
+    font-size: 8px;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+
+  .button-price-floor {
+    font-size: 8px;
+    padding: 5px 10px;
+    border-radius: 4px;
   }
 
 }

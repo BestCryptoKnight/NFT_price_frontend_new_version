@@ -16,6 +16,66 @@
         gap: 10px;
     }
 
+
+    .btn_table {
+        color: white;
+        background: none;
+        text-decoration: none;
+        border: none;
+
+        &:focus {
+            .filter-list-body {
+                display: block !important;
+            }
+        }
+    }
+
+    .filter-list-body {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        border-radius: 7px;
+        display: none;
+        z-index: 999;
+        background: grey;
+        opacity: 0.9;
+        color: white;
+        width: 300px;
+        height: auto;
+        max-height: 400px;
+        padding: 10px 10px;
+        // opacity: 0.9;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        .name {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: transparent 1px solid;
+            border-radius: 1px;
+            text-align: left;
+            font-size: 18px;
+            background: #16161c;
+            color: white;
+            padding: 3px 7px;
+            margin-bottom: 5px;
+
+            &:hover {
+                cursor: pointer;
+                background: black;
+            }
+        }
+
+        &:hover {
+            display: block;
+        }
+
+        &:active {
+            display: block;
+        }
+    }
+
     .border-but {
         border: 1px solid #1053FF;
         border-radius: 4px;
@@ -172,6 +232,13 @@
 
             .red {
                 color: #E50101;
+            }
+
+            a {
+                font-family: "Poppins";
+                color: white;
+                font-size: 15px;
+                width: 50%;
             }
 
             h5 {
@@ -388,6 +455,11 @@
 
                 .red {
                     color: #E50101;
+                }
+
+                a {
+                    font-size: 12px;
+                    width: 50%;
                 }
 
                 h5 {
