@@ -3,13 +3,14 @@ import { server } from "../../components/core/api";
 import { Axios } from "../../components/core/axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { numFormatter, numberWithCommas } from "../../utils/customFunctions";
+import { numFormatter, numberWithCommas, dateWithCustom } from "../../utils/customFunctions";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import * as selectors from "../../components/store/selectors";
 import { fetchTopCollectionsPrevNext } from "../../components/store/actions/thunks/topCollections";
 import Link from "next/link";
 import Chart from "../../components/components/ChartSale/Chart";
+import FadeIn from "react-fade-in";
 
 const getDays = (val) => {
     var given = moment(val);
@@ -27,23 +28,46 @@ const outEtherVal = (value) => {
     return value / (10 ** 18).toFixed(2);
 }
 
+const NavLink = props => (
+    <Link{...props}>
+        <a id={props.id}>
+            {props.children}
+        </a>
+    </Link>
+);
+
 const Collections = ({
     serverCollection,
     salesData,
     priceAPIData,
     nftList
 }) => {
-
+    console.log("-------------------", nftList)
+    console.log(serverCollection)
     const dispatch = useDispatch();
     const router = useRouter();
     const Links = serverCollection.data[0].links;
     const collectionName = serverCollection.data[0].data.name;
+    const collectionCreatedData = serverCollection.data[0].data.created_date;
+    const collectionTotalSupply = serverCollection.data[0].data.stats.total_supply;
+    const collectionDescription = serverCollection.data[0].data.description;
+    const collectionFloorPrice = serverCollection.data[0].data.stats.floor_price ? serverCollection.data[0].data.stats.floor_price : "NAN";
+    const collectionTotalVolumn = serverCollection.data[0].data.stats.total_volume;
+    const collectionOneDayVolumn = serverCollection.data[0].data.stats.one_day_volume;
+    const collectionAveragePrice = serverCollection.data[0].data.stats.average_price;
+    const collectionAveragePrice1d = serverCollection.data[0].data.stats.one_day_average_price;
+    const collectionAveragePrice7d = serverCollection.data[0].data.stats.seven_day_average_price;
+    const collectionAveragePrice30d = serverCollection.data[0].data.stats.thirty_day_average_price;
     const collectionOwners = serverCollection.data[0].data.stats.num_owners;
+    const one_day_sales = serverCollection.data[0].data.stats.one_day_sales;
     const thirty_day_sales = serverCollection.data[0].data.stats.thirty_day_sales;
     const collection = serverCollection.data[0].data;
-
+    const [showMore, setShowMore] = useState(false);
+    const [time, setTime] = useState("24h");
+    const [averagePrice, setAveragePrice] = useState(collectionAveragePrice1d);
+    const [dollar, setDollar] = useState(false);
+    const [nfts, setNfts] = useState(nftList.data.slice(0, 4));
     const { slug } = router.query;
-
 
     const navigate = useRouter();
     const navigateTo = (link) => {
@@ -60,16 +84,35 @@ const Collections = ({
         if (window.innerWidth <= 768) mobile = 1;
         let Case = 1;
         if (e.target.id == "south") {
+            if (pointer.style.left == lefts[mobile][0] + "px") return;
             pointer.style.left = lefts[mobile][0] + "px";
         }
         else {
+            if (pointer.style.left == lefts[mobile][1] + "px") return;
             pointer.style.left = lefts[mobile][1] + "px";
             Case = 0;
         }
         south.style.backgroundColor = colors[Case];
-        north.style.backgroundColor = colors[1 - Case]
+        north.style.backgroundColor = colors[1 - Case];
+        setDollar(!dollar);
     }
 
+    const handleTimeChange = (e) => {
+        setTime(e.target.value);
+        if (e.target.value == "7d")
+            setAveragePrice(collectionAveragePrice7d);
+        else if (e.target.value == "30d")
+            setAveragePrice(collectionAveragePrice30d);
+        else
+            setAveragePrice(collectionAveragePrice1d);
+    }
+
+    const [count, setCount] = useState(1);
+
+    const handleLoadMore = () => {
+        setCount(count + 1);
+        setNfts([...nfts, ...nftList.data.slice(count * 4, (count + 1) * 4)]);
+    }
 
     return (
         <div>
@@ -89,13 +132,19 @@ const Collections = ({
                 <div className="session-1">
                     <div className="opt-btn-group">
                         <div className="border-btn">
-                            <i className="fas fa-arrow-left"></i>
+                            <NavLink href="/">
+                                <i className="fas fa-arrow-left"></i>
+                            </NavLink>
                         </div>
                         <div className="dis-flex gap-10">
-                            <select className="border-btn select">
-                                <option>24h</option>
-                                <option>12h</option>
-                                <option>6h</option>
+                            <select
+                                className="border-btn select"
+                                value={time}
+                                onChange={handleTimeChange}
+                            >
+                                <option value={"24h"}>24h</option>
+                                <option value={"7d"}>7d</option>
+                                <option value={"30d"}>30d</option>
                             </select>
                             <div className="border-btn toggle">
                                 <div className="toggle-pointer" id="pointer"></div>
@@ -125,14 +174,22 @@ const Collections = ({
                             </div>
                             <div className="content-sub-box w-100">
                                 <div className="icons-group mobile-hide">
-                                    <img src="/img/icons/social1.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/social2.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/social3.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/social4.png" alt="" className="icon-general" />
-                                    <div className="vertical-line"></div>
+                                    <NavLink href={collection.external_url ? collection.external_url : ""}>
+                                        <img src={"/img/icons/social1.png"} alt="" className="icon-general" />
+                                    </NavLink>
+                                    <NavLink href={`https://twitter.com/${collection.twitter_username}`}>
+                                        <img src="/img/icons/social2.png" alt="" className="icon-general" />
+                                    </NavLink>
+                                    <NavLink href={collection.discord_url ? collection.discord_url : ""}>
+                                        <img src="/img/icons/social3.png" alt="" className="icon-general" />
+                                    </NavLink>
+                                    {/* <NavLink href={collection.discord_url ? collection.discord_url : ""}>
+                                        <img src="/img/icons/social4.png" alt="" className="icon-general" />
+                                    </NavLink> */}
+                                    {/* <div className="vertical-line"></div>
                                     <img src="/img/icons/star-line.png" alt="" className="icon-general" />
                                     <img src="/img/icons/share-fill.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/menu.png" alt="" className="icon-menu" />
+                                    <img src="/img/icons/menu.png" alt="" className="icon-menu" /> */}
                                 </div>
                                 <div className="">
                                     <div className="bold-font">
@@ -153,7 +210,7 @@ const Collections = ({
                                         <div className="">
                                             <div className="d-flex gap-10 flex-column flex-md-row">
                                                 <div className=" order-md-2 order-sm-1">
-                                                    <span className="bold-font">10,000</span>
+                                                    <span className="bold-font">{collectionTotalSupply}</span>
                                                 </div>
                                                 <div className=" order-md-1 order-sm-2">
                                                     <span className="text-grey-font">Items Supply</span>
@@ -164,7 +221,7 @@ const Collections = ({
                                         <div className="">
                                             <div className="d-flex gap-10 flex-column flex-md-row">
                                                 <div className="order-md-2 order-sm-1">
-                                                    <span className="bold-font">Jul 2022</span>
+                                                    <span className="bold-font">{dateWithCustom(collectionCreatedData)}</span>
                                                 </div>
                                                 <div className="order-md-1 order-sm-2">
                                                     <span className="text-grey-font">Created</span>
@@ -178,7 +235,7 @@ const Collections = ({
 
                                     <div className="d-flex gap-10">
 
-                                        <div className="">
+                                        {/* <div className="">
                                             <div className="d-flex gap-10 flex-column flex-md-row">
                                                 <div className="order-md-2 order-sm-1">
                                                     <span className="bold-font">2.5%</span>
@@ -188,7 +245,7 @@ const Collections = ({
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="straight-line mobile-hide"></div>
+                                        <div className="straight-line mobile-hide"></div> */}
                                         <div className="">
                                             <div className="d-flex gap-10 flex-column flex-md-row">
                                                 <div className="order-md-2 order-sm-1">
@@ -211,96 +268,190 @@ const Collections = ({
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <span className="bold-font">#3</span>
                             </div>
-                            <div className="dis-flex-col ">
+                            <div className="dis-flex-col w-100">
                                 <div className="">
                                     <span className="text-font">
-                                        The Bored Ape Yacht Club is a collection of 10,000 unique Bored Ape NFTs— unique digital collectibles living on the Ethereum blockchain. Your Bored Ape doubles
+                                        {
+                                            showMore
+                                                ? collectionDescription
+                                                : `${collectionDescription.substring(0, 160)}`
+                                        }
                                     </span>
                                     &nbsp;&nbsp;
-                                    <span className="text-color-font">
-                                        See more&nbsp;<i className="fas fa-chevron-down"></i>
+                                    <span className="text-color-font" onClick={() => setShowMore(!showMore)}>
+                                        {
+                                            showMore
+                                                ? <>See less &nbsp;<i className="fas fa-chevron-up"></i></>
+                                                : <>See more&nbsp;<i className="fas fa-chevron-down"></i></>
+                                        }
+
+
                                     </span>
 
                                 </div>
                                 <div className="icons-group-1 mobile-show">
-                                    <img src="/img/icons/social1.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/social2.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/social3.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/social4.png" alt="" className="icon-general" />
-                                    <div className="vertical-line"></div>
+                                    <NavLink href={collection.external_url ? collection.external_url : ""}>
+                                        <img src={"/img/icons/social1.png"} alt="" className="icon-general" />
+                                    </NavLink>
+                                    <NavLink href={`https://twitter.com/${collection.twitter_username}`}>
+                                        <img src="/img/icons/social2.png" alt="" className="icon-general" />
+                                    </NavLink>
+                                    <NavLink href={collection.discord_url ? collection.discord_url : ""}>
+                                        <img src="/img/icons/social3.png" alt="" className="icon-general" />
+                                    </NavLink>
+                                    {/* <img src="/img/icons/social4.png" alt="" className="icon-general" /> */}
+                                    {/* <div className="vertical-line"></div>
                                     <img src="/img/icons/star-line.png" alt="" className="icon-general" />
                                     <img src="/img/icons/share-fill.png" alt="" className="icon-general" />
-                                    <img src="/img/icons/menu.png" alt="" className="icon-menu" />
+                                    <img src="/img/icons/menu.png" alt="" className="icon-menu" /> */}
                                 </div>
                                 <div className="dis-flex mt-2 mobile-hide">
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
+                                    <div className="flex-auto text-center">
+                                        <div className="bold-color-font">
+                                            {
+                                                dollar
+                                                    ?
+                                                    <>
+                                                        ${numFormatter(collectionFloorPrice * priceAPIData.data.USD)}
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <i className="fab fa-ethereum"></i>
+                                                        {collectionFloorPrice}
+                                                    </>
+                                            }
+                                        </div>
+                                        <div className="text-font">Floor Price</div>
                                     </div>
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
+                                    <div className="flex-auto text-center">
+                                        <div className="bold-color-font">
+                                            {
+                                                dollar
+                                                    ?
+                                                    <>
+                                                        ${numFormatter(collectionTotalVolumn * priceAPIData.data.USD)}
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <i className="fab fa-ethereum"></i>
+                                                        {numFormatter(collectionTotalVolumn)}
+                                                    </>
+                                            }
+                                        </div>
+                                        <div className="text-font">Total Volumn</div>
                                     </div>
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
+                                    <div className="flex-auto text-center">
+                                        <div className="bold-color-font">
+                                            {
+                                                dollar
+                                                    ?
+                                                    <>
+                                                        ${numFormatter(averagePrice * priceAPIData.data.USD)}
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <i className="fab fa-ethereum"></i>
+                                                        {numFormatter(averagePrice)}
+                                                    </>
+                                            }
+                                        </div>
+                                        <div className="text-font">Average Price</div>
                                     </div>
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
+                                    {/* <div className="flex-auto text-center">
+                                        <div className="bold-color-font">Avatar</div>
+                                        <div className="text-font">Category</div>
+                                    </div> */}
+                                    {/* <div className="flex-auto text-center">
+                                        <div className="bold-color-font">18%</div>
+                                        <div className="text-font">Listed</div>
+                                    </div> */}
+                                    <div className="flex-auto text-center">
+                                        <div className="bold-color-font">{collectionOwners}</div>
+                                        <div className="text-font">Owners</div>
                                     </div>
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
-                                    </div>
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
-                                    </div>
-                                    <div className="flex-auto">
-                                        <div className="bold-color-font">0.08</div>
-                                        <div className="text-font">Mint price</div>
-                                    </div>
+                                    {/* <div className="flex-auto text-center">
+                                        <div className="bold-color-font">63.98%</div>
+                                        <div className="text-font">Unique Owners</div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className=" mobile-show w-100">
-                    <div className="d-flex flex-column mt-2 content-box w-100">
-                        <div className="d-flex">
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
+                    <div className="d-flex mt-2 content-box w-100">
+                        {/* <div className="d-flex"> */}
+                        <div className="flex-auto text-center">
+                            <div className="bold-color-font">
+                                {
+                                    dollar
+                                        ?
+                                        <>
+                                            ${numFormatter(collectionFloorPrice * priceAPIData.data.USD)}
+                                        </>
+                                        :
+                                        <>
+                                            <i className="fab fa-ethereum"></i>
+                                            {collectionFloorPrice}
+                                        </>
+                                }
                             </div>
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
-                            </div>
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
-                            </div>
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
-                            </div>
+                            <div className="text-font">Floor Price</div>
                         </div>
-                        <div className="d-flex">
+                        <div className="flex-auto text-center">
+                            <div className="bold-color-font">
+                                {
+                                    dollar
+                                        ?
+                                        <>
+                                            ${numFormatter(collectionTotalVolumn * priceAPIData.data.USD)}
+                                        </>
+                                        :
+                                        <>
+                                            <i className="fab fa-ethereum"></i>
+                                            {numFormatter(collectionTotalVolumn)}
+                                        </>
+                                }
+                            </div>
+                            <div className="text-font">Total Volumn</div>
+                        </div>
+                        <div className="flex-auto text-center">
+                            <div className="bold-color-font">
+                                {
+                                    dollar
+                                        ?
+                                        <>
+                                            ${numFormatter(averagePrice * priceAPIData.data.USD)}
+                                        </>
+                                        :
+                                        <>
+                                            <i className="fab fa-ethereum"></i>
+                                            {numFormatter(collectionAveragePrice)}
+                                        </>
+                                }
+                            </div>
+                            <div className="text-font">Average Price</div>
+                        </div>
+                        {/* <div className="flex-auto text-center">
+                                <div className="bold-color-font">Avatar</div>
+                                <div className="text-font">Category</div>
+                            </div> */}
+                        {/* </div> */}
+                        {/* <div className="d-flex"> */}
 
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
-                            </div>
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
-                            </div>
-                            <div className="flex-auto text-center">
-                                <div className="bold-color-font">0.08</div>
-                                <div className="text-font">Mint price</div>
-                            </div>
+                        {/* <div className="flex-auto text-center">
+                                <div className="bold-color-font">18%</div>
+                                <div className="text-font">Listed</div>
+                            </div> */}
+                        <div className="flex-auto text-center">
+                            <div className="bold-color-font">{collectionOwners}</div>
+                            <div className="text-font">Owners</div>
                         </div>
+                        {/* <div className="flex-auto text-center">
+                                <div className="bold-color-font">63.98%</div>
+                                <div className="text-font">Unique Owners</div>
+                            </div> */}
+                        {/* </div> */}
                     </div>
                 </div>
 
@@ -315,32 +466,36 @@ const Collections = ({
                         </h1>
                     </div>
                     <div className="dis-flex-col ttable">
-                        {
-                            nftList.data.map((nft, index) => (
+                        <FadeIn>
+                            {
+                                nfts.map((nft, index) => (
 
-                                <div className="trr" key={index}>
-                                    <div className="tdd">
-                                        <img src={nft.data.image_url} alt="" className="imgg" />
-                                        <h5 className="ml-2 img-text">{nft.data.name}</h5>
+                                    <div className="trr" key={index}>
+                                        <div className="tdd">
+                                            <img src={nft.data.image_url} alt="" className="imgg" />
+                                            <h5 className="ml-2 img-text">#{nft.data.token_id}</h5>
+                                        </div>
+                                        <div className="tdd tac">
+                                            <h6><i className="fab fa-ethereum"></i> &nbsp;{outEtherVal(nft.data.last_sale.total_price)}</h6>
+                                        </div>
+                                        <div className="tdd">
+                                            <h6>{nft.data.last_sale?.created_date ? getDays(nft.data.last_sale?.created_date) : '--'} days ago</h6>
+                                        </div>
+                                        <div className="tdd tac">
+                                            <h6 >{shortAddr(nft.data.owner.address)} <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h6>
+                                        </div>
                                     </div>
-                                    <div className="tdd tac">
-                                        <h6><i className="fab fa-ethereum"></i> &nbsp;{outEtherVal(nft.data.last_sale.total_price)}</h6>
-                                    </div>
-                                    <div className="tdd">
-                                        <h6>{nft.data.last_sale?.created_date ? getDays(nft.data.last_sale?.created_date) : '--'} days ago</h6>
-                                    </div>
-                                    <div className="tdd tac">
-                                        <h6 >{shortAddr(nft.data.owner.address)} <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h6>
-                                    </div>
-                                </div>
-                            ))
-                        }
-
+                                ))
+                            }
+                        </FadeIn>
 
                     </div>
                 </div>
                 <div className="justify mt-4">
-                    <div className="load-btn">
+                    <div
+                        className="load-btn"
+                        onClick={handleLoadMore}
+                    >
                         Load More
                     </div>
                 </div>
@@ -351,19 +506,19 @@ const Collections = ({
                 </div>
                 <div className="session-3">
                     <div className="sub-title-font ppadding">
-                        Bored Ape Yacht Club price floor and sales live data
+                        {collectionName} price floor and sales live data
                     </div>
                     <div className="text-font ppadding">
-                        The current price floor of Bored Ape Yacht Club is 69.41 ETH and the 24 hour trading volume is 892.86 ETH with 13 sales. In the last 24 hours, the price floor of Bored Ape Yacht Club is down 3.33%. The 7D average sale price is 79.429 ETH, the 7D highest sale price is 120.61 ETH and the 7D lowest sale price is 9.00 ETH. The project is currently ranked #1 in NFT Price Floor with a floor cap of 694,100 ETH. It has a listed ratio of 8.23% and a max supply of 10,000.
-                        Bored Ape Yacht Club is an NFT collectible created by Yuga Labs that was released on 4-22-2021. The project consists of 10,000 unique digital items living on the Ethereum blockchain. We categorize it as a pfp/avatar project and it's part of the Yuga Labs general collection.
+                        The current price floor of {collectionName} is {numFormatter(collectionFloorPrice)} ETH and the 24 hour trading volume is {numFormatter(collectionOneDayVolumn)} ETH with {one_day_sales} sales. In the last 24 hours, the price floor of {collectionName} is down 3.33%. The 7D average sale price is 79.429 ETH, the 7D highest sale price is 120.61 ETH and the 7D lowest sale price is 9.00 ETH. The project is currently ranked #1 in NFT Price Floor with a floor cap of 694,100 ETH. It has a listed ratio of 8.23% and a max supply of 10,000.
+                        {collectionName} is an NFT collectible created by Yuga Labs that was released on 4-22-2021. The project consists of 10,000 unique digital items living on the Ethereum blockchain. We categorize it as a pfp/avatar project and it's part of the Yuga Labs general collection.
                     </div>
                     <div className="buttom-background ppadding">
 
                         <div className="sub-title-font res-pt2">
-                            What is Bored Ape Yacht Club?
+                            What is {collectionName}?
                         </div>
                         <div className="text-font res-pt2">
-                            Bored Ape Yacht Club is, along with CryptoPunks, one of the most popular digital collectibles in NFT format on Ethereum. If CryptoPunks can be considered the genesis of the PFP (profile picture) concept applied to collectible digital assets that take the form of non-fungible tokens, Bored Ape Yacht Club represents the refinement of this concept through a series of innovations.
+                            {collectionName} is, along with CryptoPunks, one of the most popular digital collectibles in NFT format on Ethereum. If CryptoPunks can be considered the genesis of the PFP (profile picture) concept applied to collectible digital assets that take the form of non-fungible tokens, {collectionName} represents the refinement of this concept through a series of innovations.
                         </div>
                         <div className="justify">
                             <div className="fload-btn">
@@ -408,6 +563,15 @@ export async function getServerSideProps({ params }) {
             },
         }
     );
+    // const nftListAPIRequest = await fetch(
+    //     `${server.baseUrl}/nft/getNfts/${params.slug}/${page}/12`,
+    //     {
+    //         method: "GET", // or 'PUT'
+    //         headers: {
+    //             [`${server.header.key}`]: `${server.header.value}`,
+    //         },
+    //     }
+    // );
     const nftListAPIRequest = await fetch(
         `${server.baseUrl}/nft/getLatestSaleNfts/${params.slug}`,
         {

@@ -50,7 +50,7 @@
             width: 22px;
             height: 22px;
             border-radius: 50%;
-            background: #1053FF;
+            background: rgba(255, 255, 255, 0.2);
             font-size: 12px;
             padding: 3px 5px;
         }
@@ -60,8 +60,8 @@
         }
 
         .south {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: rgba(255, 255, 255, 0.4);
+            background-color: #1053FF;
+            color: rgba(255, 255, 255);
             padding: 2px 7px;
         }
 
@@ -96,6 +96,7 @@
 
         .img-width {
             width: 172px;
+            height: 172px;
             border-radius: 6px;
         }
 
@@ -256,6 +257,7 @@
         font-weight: 500;
         line-height: 30px;
         color: #E5A601;
+        cursor: pointer;
     }
 
     .text-grey-font {
@@ -305,6 +307,7 @@
 
                 .imgg {
                     width: 80px;
+                    height: 80px;
                     border-radius: 10px;
                     margin-top: -2px;
                 }
@@ -454,6 +457,7 @@
         .session-1 {
             .img-width {
                 width: 131px;
+                height: 131px;
             }
         }
 
@@ -461,11 +465,11 @@
             margin-top: 1rem;
 
             .tdd:first-child {
-                width: 40%;
+                width: 35%;
             }
 
             .tdd:nth-child(2) {
-                width: 15%;
+                width: 20%;
             }
 
             .tdd:nth-child(3) {
@@ -490,8 +494,9 @@
                 .tdd {
 
                     .imgg {
-                        margin-top: -20px;
+                        margin-top: 0px;
                         width: 40px;
+                        height: 40px;
                     }
 
                     h5 {

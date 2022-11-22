@@ -370,6 +370,10 @@
                 padding: 0px 3px;
             }
 
+            .south {
+                background-color: #1053FF;
+            }
+
             .south-area {
                 position: absolute;
                 width: 25px;
@@ -431,7 +435,7 @@
                 display: flex;
                 border: 1px solid #1053FF;
                 background-color: #161b30;
-                padding: 0px;
+                padding: 5px 0px;
                 border-radius: 4px;
                 color: white;
                 align-items: center;
@@ -459,12 +463,12 @@
 
                 a {
                     font-size: 12px;
-                    width: 50%;
+                    width: 70%;
                 }
 
                 h5 {
                     font-size: 12px;
-                    width: 50%;
+                    width: 70%;
                     display: inline-block;
                 }
 
@@ -526,7 +530,7 @@
 
             .item-num {
                 position: absolute;
-                left: 50%;
+                left: 60%;
                 top: 50%;
                 transform: translate(-50%, -50%);
             }

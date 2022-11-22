@@ -9,32 +9,46 @@ import { numFormatter, numberWithCommas } from "../utils/customFunctions";
 const Home = ({ datas, priceAPIData, dataChain }) => {
 	const [tableDatas, setTableDatas] = useState([]);
 	useEffect(() => {
-		setTableDatas(datas.data.map((backendData, index) => {
-			return {
-				id: index,
-				img: backendData.data.image_url,
-				collectible: backendData.data.name,
-				pricefloor: backendData.data.stats.floor_price ? backendData.data.stats.floor_price : 0,
-				percentage: backendData.data.stats.one_day_change * 100,
-				percentage_7: backendData.data.stats.seven_day_change * 100,
-				percentage_30: backendData.data.stats.thirty_day_change * 100,
-				volumn: backendData.data.stats.one_day_volume,
-				volumn_7: backendData.data.stats.seven_day_volume,
-				volumn_30: backendData.data.stats.thirty_day_volume,
-				sales: backendData.data.stats.one_day_sales,
-				sales_7: backendData.data.stats.seven_day_sales,
-				sales_30: backendData.data.stats.thirty_day_sales,
-				ratio_pecentage: backendData.data.stats.supply_ratio_ratio,
-				ratio: backendData.data.stats.supply_ratio_pecentage,
-				marketcap: backendData.data.stats.market_capture,
-				slug: backendData.data.slug,
-				chain: (backendData.chain.symbol == "ETH")
-					? "ETHEREUM"
-					: (backendData.chain.symbol == "SOL")
-						? "SOLANA"
-						: "MATIC"
-			}
-		}))
+		const fetchCollection = async () => {
+			const collectionsRequest = await fetch(
+				`${server.baseUrl}${server.collections}/getCollections/1d`,
+				{
+					method: "GET", // or 'PUT'
+					headers: {
+						[`${server.header.key}`]: `${server.header.value}`,
+					},
+				}
+			);
+			const collections = await collectionsRequest.json();
+			console.log("collections", collections);
+			setTableDatas(collections.data.map((backendData, index) => {
+				return {
+					id: index,
+					img: backendData.data.image_url,
+					collectible: backendData.data.name,
+					pricefloor: backendData.data.stats.floor_price ? backendData.data.stats.floor_price : 0,
+					percentage: backendData.data.stats.one_day_change * 100,
+					percentage_7: backendData.data.stats.seven_day_change * 100,
+					percentage_30: backendData.data.stats.thirty_day_change * 100,
+					volumn: backendData.data.stats.one_day_volume,
+					volumn_7: backendData.data.stats.seven_day_volume,
+					volumn_30: backendData.data.stats.thirty_day_volume,
+					sales: backendData.data.stats.one_day_sales,
+					sales_7: backendData.data.stats.seven_day_sales,
+					sales_30: backendData.data.stats.thirty_day_sales,
+					ratio_pecentage: backendData.data.stats.supply_ratio_ratio,
+					ratio: backendData.data.stats.supply_ratio_pecentage,
+					marketcap: backendData.data.stats.market_capture,
+					slug: backendData.data.slug,
+					chain: (backendData.chain.symbol == "ETH")
+						? "ETHEREUM"
+						: (backendData.chain.symbol == "SOL")
+							? "SOLANA"
+							: "MATIC"
+				}
+			}));
+		};
+		fetchCollection();
 	}, []);
 
 	return (
@@ -121,7 +135,14 @@ const Home = ({ datas, priceAPIData, dataChain }) => {
 								<h1 className="gradient-font tac w10">
 									Top Collections
 								</h1>
-								{tableDatas.length && <NFTTable tabledata={tableDatas} priceUSD={priceAPIData.data.USD} dataChain={dataChain.data} />}
+								{(tableDatas.length > 0)
+									? <NFTTable tabledata={tableDatas} priceUSD={priceAPIData.data.USD} dataChain={dataChain.data} />
+									: <div className="loader">
+										<div className="outer"></div>
+										<div className="middle"></div>
+										<div className="inner"></div>
+									</div>
+								}
 							</section>
 						</div>
 					</section>
@@ -134,15 +155,16 @@ const Home = ({ datas, priceAPIData, dataChain }) => {
 export async function getStaticProps() {
 	// Call an external API endpoint to get posts.
 	// You can use any data fetching library
-	const res = await fetch(
-		`${server.baseUrl}${server.collections}/getCollections/1d`,
-		{
-			method: "GET", // or 'PUT'
-			headers: {
-				[`${server.header.key}`]: `${server.header.value}`,
-			},
-		}
-	);
+
+	// const res = await fetch(
+	// 	`${server.baseUrl}${server.collections}/getCollections/1d`,
+	// 	{
+	// 		method: "GET", // or 'PUT'
+	// 		headers: {
+	// 			[`${server.header.key}`]: `${server.header.value}`,
+	// 		},
+	// 	}
+	// );
 
 	const priceAPIRequest = await fetch(
 		`${server.baseUrl}/get-eth-stats`,
@@ -163,7 +185,7 @@ export async function getStaticProps() {
 	}
 	);
 
-	const datas = await res.json();
+	// const datas = await res.json();
 	const priceAPIData = await priceAPIRequest.json();
 	const dataChain = await dataChainRequest.json();
 
@@ -171,7 +193,7 @@ export async function getStaticProps() {
 	// will receive `datas` as a prop at build time
 	return {
 		props: {
-			datas,
+			// datas,
 			priceAPIData,
 			dataChain
 		},
