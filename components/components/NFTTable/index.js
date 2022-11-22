@@ -5,17 +5,10 @@ import { numFormatter, numberWithCommas } from "../../../utils/customFunctions";
 import { useRouter } from "next/router";
 import Link from 'next/link';
 const Ether = "img/icons/vector.svg";
-
-//Initialize id of each token
-// for (let id in tabledata) {
-//     tabledata[id].id = parseInt(id);
-// }
+import FadeIn from "react-fade-in";
 
 const NFTTable = ({ tabledata, priceUSD, dataChain }) => {
 
-    console.log("tabledata", tabledata)
-    console.log("priceUSD", priceUSD)
-    console.log("dataChain", dataChain)
     const NavLink = props => (
         <Link{...props}>
             <a id={props.id}>
@@ -84,9 +77,11 @@ const NFTTable = ({ tabledata, priceUSD, dataChain }) => {
         if (window.innerWidth <= 768) mobile = 1;
         let Case = 1;
         if (e.target.id == "south") {
+            if (pointer.style.left == lefts[mobile][0] + "px") return;
             pointer.style.left = lefts[mobile][0] + "px";
         }
         else {
+            if (pointer.style.left == lefts[mobile][1] + "px") return;
             pointer.style.left = lefts[mobile][1] + "px";
             Case = 0;
         }
@@ -227,73 +222,75 @@ const NFTTable = ({ tabledata, priceUSD, dataChain }) => {
                     <div className="td hidden-mobile">Listed/Supply Ratio<SortArrow sort={sort} column="ratio" /></div>
                     <div className="td hidden-mobile">Market Cap<SortArrow sort={sort} column="marketcap" /></div>
                 </div>
-                {pagedata.map((nft, id) => (
-                    <div className="tr" key={id}>
-                        <div className="td">
-                            <div>
-                                <img alt="star" onClick={(e) => { addToFavourites(e, id) }} className="star" src={`img/icons/star${nft.stared ? '-filled' : ''}.svg`} />
+                <FadeIn>
+                    {pagedata.map((nft, id) => (
+                        <div className="tr" key={id}>
+                            <div className="td">
+                                <div>
+                                    <img alt="star" onClick={(e) => { addToFavourites(e, id) }} className="star" src={`img/icons/star${nft.stared ? '-filled' : ''}.svg`} />
+                                </div>
+                                <div>{nft.id + 1}</div>
                             </div>
-                            <div>{nft.id + 1}</div>
-                        </div>
-                        <div className="td align-center">
-                            <img alt="token" className="avatar" src={nft.img} />
-                            <NavLink href={`/collections/${nft.slug}`}>
-                                <h5>{nft.collectible}</h5>
-                            </NavLink>
-                            <button className="chart-button hidden-mobile" onClick={() => navigateTo(`/collections/${nft.slug}`)}>
+                            <div className="td align-center">
+                                <img alt="token" className="avatar" src={nft.img} />
+                                <NavLink href={`/collections/${nft.slug}`}>
+                                    <h5>{nft.collectible}</h5>
+                                </NavLink>
+                                {/* <button className="chart-button hidden-mobile" onClick={() => navigateTo(`/collections/${nft.slug}`)}>
                                 Charts&nbsp;<i className="fa-sharp fa-solid fa-arrow-up"></i>
-                            </button>
-                        </div>
-                        <div className="td ">
-                            {
-                                (dollar) ?
-                                    <>
-                                        ${numFormatter(nft.pricefloor)}
-                                    </> :
-                                    <>
-                                        <img src={Ether} alt="ether" />
-                                        {numFormatter(nft.pricefloor)}
-                                    </>
-                            }
-                        </div>
-                        <div className="td hidden-mobile">
-                            {
-                                nft.percentage > 0 ?
-                                    (<span className="green">+{numFormatter(nft.percentage)}%</span>) :
-                                    (<span className="red">{numFormatter(nft.percentage)}%</span>)
-                            }
-                        </div>
-                        <div className="td ">
-                            {
-                                (dollar) ?
-                                    <>
-                                        ${numFormatter(nft.volumn)}
-                                    </> :
-                                    <>
-                                        <img src={Ether} alt="ether" />
-                                        {numFormatter(nft.volumn)}
-                                    </>
-                            }
-                        </div>
-                        <div className="td hidden-mobile">
-                            {numFormatter(nft.sales)}
-                        </div>
-                        <div className="td hidden-mobile">
-                            {nft.ratio_pecentage}
-                        </div>
-                        <div className="td hidden-mobile">
-                            {
-                                (dollar) ?
-                                    <>
-                                        ${numFormatter(nft.marketcap)}
-                                    </> :
-                                    <>
-                                        <img src={Ether} alt="ether" />
-                                        {numFormatter(nft.marketcap)}
-                                    </>
-                            }
-                        </div>
-                    </div>))}
+                            </button> */}
+                            </div>
+                            <div className="td ">
+                                {
+                                    (dollar) ?
+                                        <>
+                                            ${numFormatter(nft.pricefloor)}
+                                        </> :
+                                        <>
+                                            <img src={Ether} alt="ether" />
+                                            {numFormatter(nft.pricefloor)}
+                                        </>
+                                }
+                            </div>
+                            <div className="td hidden-mobile">
+                                {
+                                    nft.percentage > 0 ?
+                                        (<span className="green">+{numFormatter(nft.percentage)}%</span>) :
+                                        (<span className="red">{numFormatter(nft.percentage)}%</span>)
+                                }
+                            </div>
+                            <div className="td ">
+                                {
+                                    (dollar) ?
+                                        <>
+                                            ${numFormatter(nft.volumn)}
+                                        </> :
+                                        <>
+                                            <img src={Ether} alt="ether" />
+                                            {numFormatter(nft.volumn)}
+                                        </>
+                                }
+                            </div>
+                            <div className="td hidden-mobile">
+                                {numFormatter(nft.sales)}
+                            </div>
+                            <div className="td hidden-mobile">
+                                {nft.ratio_pecentage}
+                            </div>
+                            <div className="td hidden-mobile">
+                                {
+                                    (dollar) ?
+                                        <>
+                                            ${numFormatter(nft.marketcap)}
+                                        </> :
+                                        <>
+                                            <img src={Ether} alt="ether" />
+                                            {numFormatter(nft.marketcap)}
+                                        </>
+                                }
+                            </div>
+                        </div>))}
+                </FadeIn>
             </div>
             <div className="pagination">
                 <div className="arrows">
