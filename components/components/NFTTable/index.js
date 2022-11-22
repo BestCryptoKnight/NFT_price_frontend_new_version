@@ -1,5 +1,4 @@
 import SortArrow from "./SortArrow";
-// import { tabledata } from './tabledata';
 import { memo, useEffect, useState } from "react";
 import { numFormatter, numberWithCommas } from "../../../utils/customFunctions";
 import { useRouter } from "next/router";
