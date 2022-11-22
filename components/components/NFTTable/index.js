@@ -27,11 +27,11 @@ const NFTTable = ({ tabledata, priceUSD, dataChain }) => {
     const [time, setTime] = useState("24h");
 
     const [pagenum, setPagenum] = useState(1);
-    //number of tokes per page
+
     const [count, setCount] = useState(10);
-    //token data per page
+
     const [pagedata, setPagedata] = useState([]);
-    //number of pages
+
     const [pagecount, setPagecount] = useState(0);
 
     const [nftcollection, setNftcollection] = useState(tabledata);
