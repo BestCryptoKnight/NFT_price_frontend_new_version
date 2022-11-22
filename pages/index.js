@@ -20,7 +20,6 @@ const Home = ({ datas, priceAPIData, dataChain }) => {
 				}
 			);
 			const collections = await collectionsRequest.json();
-			console.log("collections", collections);
 			setTableDatas(collections.data.map((backendData, index) => {
 				return {
 					id: index,
