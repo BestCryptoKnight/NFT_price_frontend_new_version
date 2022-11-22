@@ -42,8 +42,7 @@ const Collections = ({
     priceAPIData,
     nftList
 }) => {
-    console.log("-------------------", nftList)
-    console.log(serverCollection)
+
     const dispatch = useDispatch();
     const router = useRouter();
     const Links = serverCollection.data[0].links;
