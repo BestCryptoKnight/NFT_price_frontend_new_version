@@ -476,7 +476,8 @@
     }
 
     .accordion-item p {
-        font-size: 20px !important
+        font-size: 20px !important;
+        color: #333;
     }
 
     .accordion-item:first-of-type {
@@ -504,6 +505,8 @@
     }
 
     .accordion-item:last-of-type .accordion-collapse {
+        display: block !important;
+        transition: height 0.3s;
         border-bottom-right-radius: .25rem;
         border-bottom-left-radius: .25rem
     }

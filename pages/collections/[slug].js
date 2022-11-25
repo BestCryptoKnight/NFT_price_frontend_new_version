@@ -146,6 +146,20 @@ const Collections = ({
         setNfts([...nfts, ...nftList.data.slice(count * 4, (count + 1) * 4)]);
     }
 
+    const toggleAccordion = (event) => {
+        console.log(event);
+        let button = event.target;
+        if (button.type !== "button") button = button.parentElement;
+        if (button.classList.contains("collapsed")) {
+            button.classList.remove("collapsed");
+            button.parentElement.parentElement.lastChild.classList.add("show");
+        }
+        else {
+            button.classList.add("collapsed");
+            button.parentElement.parentElement.lastChild.classList.remove("show");
+        }
+    }
+
     return (
         <div>
             <Head>
@@ -562,7 +576,7 @@ const Collections = ({
 
                 <h2>Frequently Asked Questions (FAQ)</h2>
                 <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingOne">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingOne" onClick={toggleAccordion}>
                         <button
                             className="accordion-button collapsed"
                             type="button"
@@ -585,7 +599,7 @@ const Collections = ({
                     </div>
                 </div>
                 <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingTwo">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingTwo" onClick={toggleAccordion}>
                         <button
                             className="accordion-button collapsed"
                             type="button"
@@ -608,7 +622,7 @@ const Collections = ({
                     </div>
                 </div>
                 <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingThree">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingThree" onClick={toggleAccordion}>
                         <button
                             className="accordion-button collapsed"
                             type="button"
@@ -633,7 +647,7 @@ const Collections = ({
                     </div>
                 </div>
                 <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingFour">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingFour" onClick={toggleAccordion}>
                         <button
                             className="accordion-button collapsed"
                             type="button"
@@ -657,7 +671,7 @@ const Collections = ({
                     </div>
                 </div>
                 <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingFive">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingFive" onClick={toggleAccordion}>
                         <button
                             className="accordion-button collapsed"
                             type="button"
