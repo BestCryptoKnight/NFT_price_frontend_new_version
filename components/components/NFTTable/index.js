@@ -233,7 +233,7 @@ const NFTTable = ({ tabledata, priceUSD, dataChain }) => {
                             <div className="td align-center">
                                 <img alt="token" className="avatar" src={nft.img} />
                                 <NavLink href={`/collections/${nft.slug}`}>
-                                    <h5>{nft.collectible}</h5>
+                                    <div className="hfont">{nft.collectible}</div>
                                 </NavLink>
                                 {/* <button className="chart-button hidden-mobile" onClick={() => navigateTo(`/collections/${nft.slug}`)}>
                                 Charts&nbsp;<i className="fa-sharp fa-solid fa-arrow-up"></i>

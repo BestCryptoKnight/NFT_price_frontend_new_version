@@ -38,11 +38,12 @@ const NavLink = props => (
 
 const Collections = ({
     serverCollection,
+    resHighestLowestValues,
     salesData,
     priceAPIData,
     nftList
 }) => {
-
+    console.log("resHighestLowestValues", resHighestLowestValues)
     const dispatch = useDispatch();
     const router = useRouter();
     const Links = serverCollection.data[0].links;
@@ -61,6 +62,28 @@ const Collections = ({
     const one_day_sales = serverCollection.data[0].data.stats.one_day_sales;
     const thirty_day_sales = serverCollection.data[0].data.stats.thirty_day_sales;
     const collection = serverCollection.data[0].data;
+    const latest_sale_total_price =
+        serverCollection.latestsale != null
+            ? serverCollection.latestsale.total_price / Math.pow(10, serverCollection.latestsale.payment_token.decimals)
+            : null;
+    const latest_sale_date =
+        serverCollection.latestsale != null
+            ? moment(serverCollection.latestsale.created_date).format(
+                "MMMM Do YYYY, h:mm:ss a"
+            )
+            : null;
+    const latest_sale_token_id =
+        serverCollection.latestsale != null
+            ? serverCollection.latestsale.asset.token_id
+            : null;
+    const nft_Lowest_Price = numberWithCommas(
+        numFormatter(parseInt(resHighestLowestValues.nft_Lowest_Price))
+    );
+    const nft_Highest_Price = numberWithCommas(
+        !isNaN(numFormatter(parseInt(resHighestLowestValues.nft_Highest_Price))) ? numFormatter(parseInt(resHighestLowestValues.nft_Highest_Price)) : 0
+    );
+    const Median = (!isNaN(numberWithCommas(parseInt(numFormatter(resHighestLowestValues.Median))))) ? numberWithCommas(parseInt(numFormatter(resHighestLowestValues.Median))) : 0;
+
     const [showMore, setShowMore] = useState(false);
     const [time, setTime] = useState("24h");
     const [averagePrice, setAveragePrice] = useState(collectionAveragePrice1d);
@@ -107,6 +130,16 @@ const Collections = ({
     }
 
     const [count, setCount] = useState(1);
+
+    const handlePrevCollection = () => {
+        if (Links.prev_slug)
+            router.push(`/collections/${Links.prev_slug}`);
+    };
+
+    const handleNextCollection = () => {
+        if (Links.next_slug)
+            router.push(`/collections/${Links.next_slug}`);
+    };
 
     const handleLoadMore = () => {
         setCount(count + 1);
@@ -472,16 +505,16 @@ const Collections = ({
                                     <div className="trr" key={index}>
                                         <div className="tdd">
                                             <img src={nft.data.image_url} alt="" className="imgg" />
-                                            <h5 className="ml-2 img-text">#{nft.data.token_id}</h5>
+                                            <div className="ml-2 img-text">#{nft.data.token_id}</div>
                                         </div>
                                         <div className="tdd tac">
-                                            <h6><i className="fab fa-ethereum"></i> &nbsp;{outEtherVal(nft.data.last_sale.total_price)}</h6>
+                                            <div className="hfont"><i className="fab fa-ethereum"></i> &nbsp;{outEtherVal(nft.data.last_sale.total_price)}</div>
                                         </div>
                                         <div className="tdd">
-                                            <h6>{nft.data.last_sale?.created_date ? getDays(nft.data.last_sale?.created_date) : '--'} days ago</h6>
+                                            <div className="hfont">{nft.data.last_sale?.created_date ? getDays(nft.data.last_sale?.created_date) : '--'} days ago</div>
                                         </div>
                                         <div className="tdd tac">
-                                            <h6 >{shortAddr(nft.data.owner.address)} <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </h6>
+                                            <div className="hfont">{shortAddr(nft.data.owner.address)} <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </div>
                                         </div>
                                     </div>
                                 ))
@@ -526,6 +559,153 @@ const Collections = ({
                         </div>
                     </div>
                 </div>
+
+                <h2>Frequently Asked Questions (FAQ)</h2>
+                <div className="accordion-item">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingOne">
+                        <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseOne"
+                        >
+                            <h3 className="mb-0">{`What is a ${collectionName}?`}</h3>
+                        </button>
+                    </h2>
+                    <div
+                        id="panelsStayOpen-collapseOne"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingOne"
+                    >
+                        <div className="accordion-body">
+                            <p>{`${collectionName} is a NFT (Non-fungible token) collection. A collection of digital artwork stored on the blockchain.`}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="accordion-item">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseTwo"
+                        >
+                            <h3 className="mb-0">{`How many ${collectionName} tokens exist?`}</h3>
+                        </button>
+                    </h2>
+                    <div
+                        id="panelsStayOpen-collapseTwo"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingTwo"
+                    >
+                        <div className="accordion-body">
+                            <p>{`In total there are 10,000 ${collectionName} NFTs. Currently ${collectionOwners} owners have at least one ${collectionName} NTF in their wallet.`}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="accordion-item">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingThree">
+                        <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseThree"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseThree"
+                        >
+                            <h3 className="mb-0">{`What was the most expensive ${collectionName} sale?`}</h3>
+                        </button>
+                    </h2>
+                    <div
+                        id="panelsStayOpen-collapseThree"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingThree"
+                    >
+                        <div className="accordion-body">
+                            <p>{`The most expensive ${collectionName} sold was ${collectionName}#${latest_sale_token_id}. it was sold for `}
+                                <i className="fab fa-ethereum mr-1"></i>{`${latest_sale_total_price} on ${latest_sale_date}`}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className="accordion-item">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingFour">
+                        <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseFour"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseFour"
+                        >
+                            <h3 className="mb-0">{`How many ${collectionName} were sold recently?`}</h3>
+                        </button>
+                    </h2>
+                    <div
+                        id="panelsStayOpen-collapseFour"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingFour"
+                    >
+                        <div className="accordion-body">
+                            <p>{`There were ${thirty_day_sales + ` ` + collectionName
+                                } sold in the last 30 days.`}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="accordion-item">
+                    <h2 className="accordion-header" id="panelsStayOpen-headingFive">
+                        <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseFive"
+                            aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseFive"
+                        >
+                            <h3 className="mb-0">{`How much does a ${collectionName} cost?`}</h3>
+                        </button>
+                    </h2>
+                    <div
+                        id="panelsStayOpen-collapseFive"
+                        className="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingFive"
+                    >
+                        <div className="accordion-body">
+                            <p>{`In the last 30 days, the cheapest ${collectionName} sales were below $${nft_Lowest_Price}. and the highest sales were for over $${nft_Highest_Price}. The median price for ${collectionName} was $${Median} in the last 30 days.`}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center mt-5">
+                    <a
+                        onClick={handlePrevCollection}
+                        href={"/collections/" + Links.prev_slug}
+                        passHref
+                        className="text-decoration-none"
+                    >
+                        <div className="next-btn">
+                            <i className="fa-solid fa-arrow-left mr-2"></i>
+                            {Links.prev_collection_name}
+                        </div>
+
+                    </a>
+                    <a
+                        onClick={handleNextCollection}
+                        href={"/collections/" + Links.next_slug + "/"}
+                        passHref
+                        className="text-decoration-none"
+                    >
+                        <div className="next-btn">
+                            {Links.next_collection_name}
+                            <i className="fa-solid fa-arrow-right ml-2"></i>
+                        </div>
+
+                    </a>
+                </div>
             </section>
 
         </div>
@@ -545,6 +725,16 @@ export async function getServerSideProps({ params }) {
 
     const priceAPIRequest = await fetch(
         `${server.baseUrl}/get-eth-stats`,
+        {
+            method: "GET", // or 'PUT'
+            headers: {
+                [`${server.header.key}`]: `${server.header.value}`,
+            },
+        }
+    );
+
+    const resHighestLowest = await fetch(
+        `${server.baseUrl}/nft/get-cheaper-and-expensive-nft/${params.slug}`,
         {
             method: "GET", // or 'PUT'
             headers: {
@@ -583,6 +773,7 @@ export async function getServerSideProps({ params }) {
 
     const serverCollection = await res.json();
     const priceAPIData = await priceAPIRequest.json();
+    const resHighestLowestValues = await resHighestLowest.json();
     const salesData = await salesDataAPIRequest.json();
     const nftList = await nftListAPIRequest.json();
     if (serverCollection.data.length === 0) {
@@ -596,6 +787,7 @@ export async function getServerSideProps({ params }) {
     return {
         props: {
             serverCollection,
+            resHighestLowestValues,
             salesData,
             priceAPIData,
             nftList
