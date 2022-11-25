@@ -98,17 +98,17 @@ const Home = ({ datas, priceAPIData, dataChain }) => {
 										<div className="home-info">
 											<div className="home-info_">
 												<div className="w10">
-													<h2 className="secondary-color">
+													<div className="secondary-color">
 														85K+
-													</h2>
+													</div>
 													<span className="grey-color">
 														NFT Sold
 													</span>
 												</div>
 												<div className="w10 tar">
-													<h2 className="secondary-color">
+													<div className="secondary-color">
 														95K+
-													</h2>
+													</div>
 													<span className="grey-color">
 														Rare NFTs
 													</span>
@@ -116,9 +116,9 @@ const Home = ({ datas, priceAPIData, dataChain }) => {
 
 											</div>
 											<div className="home-info__ w10">
-												<h2 className="secondary-color">
+												<div className="secondary-color">
 													65M+
-												</h2>
+												</div>
 												<span className="grey-color">
 													Trading
 												</span>
