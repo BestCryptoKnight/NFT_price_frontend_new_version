@@ -11,6 +11,7 @@ import { fetchTopCollectionsPrevNext } from "../../components/store/actions/thun
 import Link from "next/link";
 import Chart from "../../components/components/ChartSale/Chart";
 import FadeIn from "react-fade-in";
+import Loader from "../../components/components/Loader/Loader";
 
 const getDays = (val) => {
     var given = moment(val);
@@ -41,9 +42,7 @@ const Collections = ({
     resHighestLowestValues,
     salesData,
     priceAPIData,
-    nftList
 }) => {
-    console.log("resHighestLowestValues", resHighestLowestValues)
     const dispatch = useDispatch();
     const router = useRouter();
     const Links = serverCollection.data[0].links;
@@ -83,13 +82,31 @@ const Collections = ({
         !isNaN(numFormatter(parseInt(resHighestLowestValues.nft_Highest_Price))) ? numFormatter(parseInt(resHighestLowestValues.nft_Highest_Price)) : 0
     );
     const Median = (!isNaN(numberWithCommas(parseInt(numFormatter(resHighestLowestValues.Median))))) ? numberWithCommas(parseInt(numFormatter(resHighestLowestValues.Median))) : 0;
+    const [page, setPage] = useState(1);
+    const { slug } = router.query;
+    const [nfts, setNfts] = useState([]);
 
+    useEffect(async () => {
+        const nftListRequest = await fetch(
+            `${server.baseUrl}/nft/getNfts/${slug}/${page}/12`,
+            {
+                method: "GET", // or 'PUT'
+                headers: {
+                    [`${server.header.key}`]: `${server.header.value}`,
+                },
+            }
+        );
+
+        const nftListResponse = await nftListRequest.json();
+        console.log("nftListResponse", nftListResponse)
+        setNfts([...nfts, ...nftListResponse.data]);
+        setShowLoader(false);
+    }, [page, slug]);
     const [showMore, setShowMore] = useState(false);
     const [time, setTime] = useState("24h");
     const [averagePrice, setAveragePrice] = useState(collectionAveragePrice1d);
     const [dollar, setDollar] = useState(false);
-    const [nfts, setNfts] = useState(nftList.data.slice(0, 4));
-    const { slug } = router.query;
+    const [showLoader, setShowLoader] = useState(false);
 
     const navigate = useRouter();
     const navigateTo = (link) => {
@@ -129,8 +146,6 @@ const Collections = ({
             setAveragePrice(collectionAveragePrice1d);
     }
 
-    const [count, setCount] = useState(1);
-
     const handlePrevCollection = () => {
         if (Links.prev_slug)
             router.push(`/collections/${Links.prev_slug}`);
@@ -142,8 +157,8 @@ const Collections = ({
     };
 
     const handleLoadMore = () => {
-        setCount(count + 1);
-        setNfts([...nfts, ...nftList.data.slice(count * 4, (count + 1) * 4)]);
+        setPage(page + 1);
+        setShowLoader(true);
     }
 
     const toggleAccordion = (event) => {
@@ -159,6 +174,9 @@ const Collections = ({
             button.parentElement.parentElement.lastChild.classList.remove("show");
         }
     }
+
+    const descriptionDtail = ` The current price floor of ${collectionName} is ${numFormatter(collectionFloorPrice)} ETH and the 24 hour trading volume is ${numFormatter(collectionOneDayVolumn)} ETH with ${one_day_sales} sales.In the last 24 hours, the price floor of ${collectionName} is down 3.33 %.The 7D average sale price is 79.429 ETH, the 7D highest sale price is 120.61 ETH and the 7D lowest sale price is 9.00 ETH.The project is currently ranked #1 in NFT Price Floor with a floor cap of 694, 100 ETH.It has a listed ratio of 8.23 % and a max supply of 10, 000.
+                        ${collectionName} is an NFT collectible created by Yuga Labs that was released on 4 - 22 - 2021. The project consists of 10, 000 unique digital items living on the Ethereum blockchain.We categorize it as a pfp / avatar project and it's part of the Yuga Labs general collection.`
 
     return (
         <div>
@@ -319,8 +337,8 @@ const Collections = ({
                                     <span className="text-font">
                                         {
                                             showMore
-                                                ? collectionDescription
-                                                : `${collectionDescription.substring(0, 160)}`
+                                                ? descriptionDtail
+                                                : `${descriptionDtail.substring(0, 160)}`
                                         }
                                     </span>
                                     &nbsp;&nbsp;
@@ -511,31 +529,46 @@ const Collections = ({
                             Sales Activity
                         </h1>
                     </div>
-                    <div className="dis-flex-col ttable">
-                        <FadeIn>
-                            {
-                                nfts.map((nft, index) => (
+                    {(nfts.length > 0)
+                        ?
+                        <div className="dis-flex-col ttable">
+                            <FadeIn>
+                                {
+                                    nfts.map((nft, index) => (
 
-                                    <div className="trr" key={index}>
-                                        <div className="tdd">
-                                            <img src={nft.data.image_url} alt="" className="imgg" />
-                                            <div className="ml-2 img-text">#{nft.data.token_id}</div>
+                                        <div className="trr" key={index}>
+                                            <div className="tdd">
+                                                <img src={nft.data.image_url} alt="" className="imgg" />
+                                                <div className="ml-2 img-text">#{nft.data.token_id}</div>
+                                            </div>
+                                            <div className="tdd tac">
+                                                <div className="hfont"><i className="fab fa-ethereum"></i> &nbsp;{numFormatter(outEtherVal(nft.data.last_sale.total_price))}</div>
+                                            </div>
+                                            <div className="tdd">
+                                                <div className="hfont">{nft.data.last_sale?.created_date ? getDays(nft.data.last_sale?.created_date) : '--'} days ago</div>
+                                            </div>
+                                            <div className="tdd tac">
+                                                <div className="hfont">
+                                                    {nft.data.last_sale.transaction
+                                                        ? shortAddr(nft.data.last_sale.transaction.from_account.address)
+                                                        : "N/A"
+                                                    }
+                                                    <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp;
+                                                    {nft.data.last_sale.transaction
+                                                        ? shortAddr(nft.data.last_sale.transaction.to_account.address)
+                                                        : "N/A"
+                                                    }
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="tdd tac">
-                                            <div className="hfont"><i className="fab fa-ethereum"></i> &nbsp;{outEtherVal(nft.data.last_sale.total_price)}</div>
-                                        </div>
-                                        <div className="tdd">
-                                            <div className="hfont">{nft.data.last_sale?.created_date ? getDays(nft.data.last_sale?.created_date) : '--'} days ago</div>
-                                        </div>
-                                        <div className="tdd tac">
-                                            <div className="hfont">{shortAddr(nft.data.owner.address)} <i className="fas fa-chevron-right primary-color"></i>&nbsp;&nbsp; 1-ether.eth </div>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </FadeIn>
-
-                    </div>
+                                    ))
+                                }
+                            </FadeIn>
+                            {showLoader && <Loader />}
+                        </div>
+                        :
+                        <Loader />
+                    }
                 </div>
                 <div className="justify mt-4">
                     <div
@@ -547,18 +580,47 @@ const Collections = ({
                 </div>
                 <div className="res-mt7">
                     <h1 className="gradient-font tac w10">
-                        About
+                        Frequently Asked Questions (FAQ)
                     </h1>
                 </div>
                 <div className="session-3">
                     <div className="sub-title-font ppadding">
-                        {collectionName} price floor and sales live data
+                        What is {collectionName}?
                     </div>
                     <div className="text-font ppadding">
-                        The current price floor of {collectionName} is {numFormatter(collectionFloorPrice)} ETH and the 24 hour trading volume is {numFormatter(collectionOneDayVolumn)} ETH with {one_day_sales} sales. In the last 24 hours, the price floor of {collectionName} is down 3.33%. The 7D average sale price is 79.429 ETH, the 7D highest sale price is 120.61 ETH and the 7D lowest sale price is 9.00 ETH. The project is currently ranked #1 in NFT Price Floor with a floor cap of 694,100 ETH. It has a listed ratio of 8.23% and a max supply of 10,000.
-                        {collectionName} is an NFT collectible created by Yuga Labs that was released on 4-22-2021. The project consists of 10,000 unique digital items living on the Ethereum blockchain. We categorize it as a pfp/avatar project and it's part of the Yuga Labs general collection.
+                        {collectionName} is, along with CryptoPunks, one of the most popular digital collectibles in NFT format on Ethereum. If CryptoPunks can be considered the genesis of the PFP (profile picture) concept applied to collectible digital assets that take the form of non-fungible tokens, {collectionName} represents the refinement of this concept through a series of innovations.
                     </div>
-                    <div className="buttom-background ppadding">
+
+                    <div className="sub-title-font ppadding">
+                        How many ${collectionName} tokens exist?
+                    </div>
+                    <div className="text-font ppadding">
+                        In total there are 10,000 {collectionName} NFTs. Currently {collectionOwners} owners have at least one {collectionName} NTF in their wallet.
+                    </div>
+
+                    <div className="sub-title-font ppadding">
+                        What was the most expensive {collectionName} sale?
+                    </div>
+                    <div className="text-font ppadding">
+                        The most expensive {collectionName} sold was {collectionName}#{latest_sale_token_id}. it was sold for
+                        <i className="fab fa-ethereum mr-1"></i>{numFormatter(latest_sale_total_price)} on {latest_sale_date}
+                    </div>
+
+                    <div className="sub-title-font ppadding">
+                        How many {collectionName} were sold recently?
+                    </div>
+                    <div className="text-font ppadding">
+                        There were {thirty_day_sales + ` ` + collectionName
+                        } sold in the last 30 days.
+                    </div>
+
+                    <div className="sub-title-font ppadding">
+                        How much does a {collectionName} cost?
+                    </div>
+                    <div className="text-font ppadding mb-5">
+                        In the last 30 days, the cheapest {collectionName} sales were below ${nft_Lowest_Price}. and the highest sales were for over ${nft_Highest_Price}. The median price for {collectionName} was ${Median} in the last 30 days.
+                    </div>
+                    {/* <div className="buttom-background ppadding">
 
                         <div className="sub-title-font res-pt2">
                             What is {collectionName}?
@@ -571,134 +633,13 @@ const Collections = ({
                                 Load More
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <h2>Frequently Asked Questions (FAQ)</h2>
-                <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingOne" onClick={toggleAccordion}>
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseOne"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseOne"
-                        >
-                            <h3 className="mb-0">{`What is a ${collectionName}?`}</h3>
-                        </button>
-                    </h2>
-                    <div
-                        id="panelsStayOpen-collapseOne"
-                        className="accordion-collapse collapse"
-                        aria-labelledby="panelsStayOpen-headingOne"
-                    >
-                        <div className="accordion-body">
-                            <p>{`${collectionName} is a NFT (Non-fungible token) collection. A collection of digital artwork stored on the blockchain.`}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingTwo" onClick={toggleAccordion}>
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseTwo"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseTwo"
-                        >
-                            <h3 className="mb-0">{`How many ${collectionName} tokens exist?`}</h3>
-                        </button>
-                    </h2>
-                    <div
-                        id="panelsStayOpen-collapseTwo"
-                        className="accordion-collapse collapse"
-                        aria-labelledby="panelsStayOpen-headingTwo"
-                    >
-                        <div className="accordion-body">
-                            <p>{`In total there are 10,000 ${collectionName} NFTs. Currently ${collectionOwners} owners have at least one ${collectionName} NTF in their wallet.`}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingThree" onClick={toggleAccordion}>
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseThree"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseThree"
-                        >
-                            <h3 className="mb-0">{`What was the most expensive ${collectionName} sale?`}</h3>
-                        </button>
-                    </h2>
-                    <div
-                        id="panelsStayOpen-collapseThree"
-                        className="accordion-collapse collapse"
-                        aria-labelledby="panelsStayOpen-headingThree"
-                    >
-                        <div className="accordion-body">
-                            <p>{`The most expensive ${collectionName} sold was ${collectionName}#${latest_sale_token_id}. it was sold for `}
-                                <i className="fab fa-ethereum mr-1"></i>{`${latest_sale_total_price} on ${latest_sale_date}`}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingFour" onClick={toggleAccordion}>
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseFour"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseFour"
-                        >
-                            <h3 className="mb-0">{`How many ${collectionName} were sold recently?`}</h3>
-                        </button>
-                    </h2>
-                    <div
-                        id="panelsStayOpen-collapseFour"
-                        className="accordion-collapse collapse"
-                        aria-labelledby="panelsStayOpen-headingFour"
-                    >
-                        <div className="accordion-body">
-                            <p>{`There were ${thirty_day_sales + ` ` + collectionName
-                                } sold in the last 30 days.`}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header" id="panelsStayOpen-headingFive" onClick={toggleAccordion}>
-                        <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#panelsStayOpen-collapseFive"
-                            aria-expanded="false"
-                            aria-controls="panelsStayOpen-collapseFive"
-                        >
-                            <h3 className="mb-0">{`How much does a ${collectionName} cost?`}</h3>
-                        </button>
-                    </h2>
-                    <div
-                        id="panelsStayOpen-collapseFive"
-                        className="accordion-collapse collapse"
-                        aria-labelledby="panelsStayOpen-headingFive"
-                    >
-                        <div className="accordion-body">
-                            <p>{`In the last 30 days, the cheapest ${collectionName} sales were below $${nft_Lowest_Price}. and the highest sales were for over $${nft_Highest_Price}. The median price for ${collectionName} was $${Median} in the last 30 days.`}</p>
-                        </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center mt-5">
                     <a
                         onClick={handlePrevCollection}
                         href={"/collections/" + Links.prev_slug}
-                        passHref
                         className="text-decoration-none"
                     >
                         <div className="next-btn">
@@ -710,7 +651,6 @@ const Collections = ({
                     <a
                         onClick={handleNextCollection}
                         href={"/collections/" + Links.next_slug + "/"}
-                        passHref
                         className="text-decoration-none"
                     >
                         <div className="next-btn">
@@ -775,21 +715,11 @@ export async function getServerSideProps({ params }) {
     //         },
     //     }
     // );
-    const nftListAPIRequest = await fetch(
-        `${server.baseUrl}/nft/getLatestSaleNfts/${params.slug}`,
-        {
-            method: "GET", // or 'PUT'
-            headers: {
-                [`${server.header.key}`]: `${server.header.value}`,
-            },
-        }
-    );
 
     const serverCollection = await res.json();
     const priceAPIData = await priceAPIRequest.json();
     const resHighestLowestValues = await resHighestLowest.json();
     const salesData = await salesDataAPIRequest.json();
-    const nftList = await nftListAPIRequest.json();
     if (serverCollection.data.length === 0) {
         return {
             redirect: {
@@ -804,7 +734,6 @@ export async function getServerSideProps({ params }) {
             resHighestLowestValues,
             salesData,
             priceAPIData,
-            nftList
         },
     };
 }
