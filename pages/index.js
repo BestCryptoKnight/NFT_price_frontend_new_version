@@ -4,7 +4,7 @@ import { Axios } from "../components/core/axios";
 import { server } from "../components/core/api";
 import Head from "next/head";
 import { numFormatter, numberWithCommas } from "../utils/customFunctions";
-
+import Loader from "../components/components/Loader/Loader";
 
 const Home = ({ datas, priceAPIData, dataChain }) => {
 	const [tableDatas, setTableDatas] = useState([]);
@@ -136,11 +136,7 @@ const Home = ({ datas, priceAPIData, dataChain }) => {
 								</h1>
 								{(tableDatas.length > 0)
 									? <NFTTable tabledata={tableDatas} priceUSD={priceAPIData.data.USD} dataChain={dataChain.data} />
-									: <div className="loader">
-										<div className="outer"></div>
-										<div className="middle"></div>
-										<div className="inner"></div>
-									</div>
+									: <Loader />
 								}
 							</section>
 						</div>
