@@ -175,6 +175,7 @@ const Collections = ({
         }
     }
 
+
     const descriptionDtail = ` The current price floor of ${collectionName} is ${numFormatter(collectionFloorPrice)} ETH and the 24 hour trading volume is ${numFormatter(collectionOneDayVolumn)} ETH with ${one_day_sales} sales.In the last 24 hours, the price floor of ${collectionName} is down 3.33 %.The 7D average sale price is 79.429 ETH, the 7D highest sale price is 120.61 ETH and the 7D lowest sale price is 9.00 ETH.The project is currently ranked #1 in NFT Price Floor with a floor cap of 694, 100 ETH.It has a listed ratio of 8.23 % and a max supply of 10, 000.
                         ${collectionName} is an NFT collectible created by Yuga Labs that was released on 4 - 22 - 2021. The project consists of 10, 000 unique digital items living on the Ethereum blockchain.We categorize it as a pfp / avatar project and it's part of the Yuga Labs general collection.`
 
