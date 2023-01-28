@@ -26,7 +26,7 @@ export function numberWithCommas(x) {
 
 export function dateWithCustom(_originalDate) {
     var originalDate = new Date(_originalDate);
-    var month = originalDate.getMonth() + 1; //months from 1-12
+    var month = originalDate.getMonth(); //months from 1-12
     // var day = originalDate.getUTCDate();
     var year = originalDate.getFullYear();
     switch (month) {
